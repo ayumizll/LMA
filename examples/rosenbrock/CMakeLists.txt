@@ -1,0 +1,19 @@
+#==============================================================================
+#         Copyright 2015 INSTITUT PASCAL UMR 6602 CNRS/Univ. Clermont II
+#
+#          Distributed under the Boost Software License, Version 1.0.
+#                 See accompanying file LICENSE.txt or copy at
+#                     http://www.boost.org/LICENSE_1_0.txt
+#==============================================================================
+
+cmake_minimum_required(VERSION 2.6)
+project(rosenbrock)
+
+find_package(libv REQUIRED core lma)
+find_package(Boost 1.51.0 REQUIRED chrono system)
+
+include(libv_configure_executable)
+
+target_link_libraries(${PROJECT_NAME}
+  ${Boost_LIBRARIES}
+  )
