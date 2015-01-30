@@ -4,13 +4,13 @@ LMA is a submodule of libv, so its installation depends on libv-core: https://gi
 
 The dependencies are Eigen-3.2, Boost >= 1.51, g++ >= 4.8.
 
-The following precedure should works for a local installation:
-
+The following procedure should work for a local installation:
+-
 git clone https://github.com/bezout/libv-core.git libv-core
 
 mkdir build_libv-core && cd build_libv-core
 
-cmake ../libv-core -DCMAKE_INSTALL_PREFIX=../ROOT 
+cmake ../libv-core -DCMAKE_INSTALL_PREFIX=../ROOT
 
 make -j4 && make install
 
@@ -24,6 +24,9 @@ cmake ../LMA -DCMAKE_PREFIX_PATH=../ROOT -DCMAKE_INSTALL_PREFIX=../ROOT
 
 make && make install
 
+
 Available examples :
+-
   bal : Bundle Adjustment on http://grail.cs.washington.edu/projects/bal/ datasets.
+  
   circle : optimize a circle equation
