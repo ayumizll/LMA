@@ -20,7 +20,7 @@
 namespace lma
 {
   template<int ddl, int dim, class Float, int size> 
-  std::array<adct::Ad<Float,ddl>,size> to_adct(const Eigen::Matrix<Float,size,1>& mat, boost::fusion::pair<Eig,Float>)
+  std::array<adct::Ad<Float,ddl,Eig>,size> to_adct(const Eigen::Matrix<Float,size,1>& mat, boost::fusion::pair<Eig,Float>)
   {
     std::array<adct::Ad<Float,ddl,Eig>,size> array;
     for(size_t i = 0 ; i < size ; ++i)

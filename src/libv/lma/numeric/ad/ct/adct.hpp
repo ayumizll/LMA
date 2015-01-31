@@ -21,7 +21,7 @@
 
 #ifdef USE_TOON
 #include <TooN/TooN.h>
-#include <libv/lma/optimisation2/container/tag.hpp>
+#include <libv/lma/lm/container/tag.hpp>
 #endif
 #include <libv/lma/ttt/traits/naming.hpp>
 
