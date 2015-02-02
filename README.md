@@ -2,7 +2,7 @@
 
 LMA is a submodule of libv, so its installation depends on libv-core: https://github.com/bezout/libv-core.git
 
-The dependencies are Eigen-3.2, Boost >= 1.51, g++ >= 4.8.
+The dependencies are Eigen-3.2, Boost >= 1.51, g++ >= 4.8, c++11.
 
 The following procedure should work for a local installation:
 -

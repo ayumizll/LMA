@@ -1,2 +1,2 @@
-add_definitions(-std=gnu++14)
+add_definitions(-std=gnu++11)
 
