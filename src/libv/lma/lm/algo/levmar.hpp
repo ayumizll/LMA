@@ -284,7 +284,7 @@ namespace lma
           bf::for_each(ba_.h,detail::SetZero());
           bf::for_each(ba_.jte,detail::SetZero());
           // compute H = JtJ & Jte
-          detail::fill_hessien<Derivator<typename Policy::MatrixTag>>(bundle_,ba_,map_erreur,meds);
+          detail::fill_hessien<typename Policy::MatrixTag>(bundle_,ba_,map_erreur,meds);
           Policy::save_h(ba_.h);
         }
         else

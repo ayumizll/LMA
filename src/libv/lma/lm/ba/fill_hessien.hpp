@@ -27,7 +27,7 @@ namespace lma
   {
     //! on calcule chaque jacobienne et on met à jour la hessienne.
     //! les erreurs sont pré-calculées
-    template<class Derivator, class Bundle, class Ba, class MapErreur, class Medianes> struct FillHessien32
+    template<class Tag, class Bundle, class Ba, class MapErreur, class Medianes> struct FillHessien32
     {
       const Bundle& bundle;
       Ba& ba;
@@ -48,9 +48,8 @@ namespace lma
             auto fun = make_function(bundle.obs(iobs));
             auto map = bundle.map(iobs);
             
-            typename detail::JacobReturnType<typename Derivator::Tag,decltype(fun),decltype(map)>::type jacob;
-            
-            Derivator::derive(fun,map,jacob,v_erreur[iobs()].first,typename ToDerivativeTag<Obs>::type());// map<pair<Key,Jacob>,...>
+            typename detail::JacobReturnType<Tag,decltype(fun),decltype(map)>::type jacob;
+            derivator<Tag>(fun,map,jacob,v_erreur[iobs()].first);
             const auto& map_indice = bundle.spi2.indices(iobs);// vector<Indice,...>
             detail::apply_mestimator(bundle.obs(iobs),jacob,v_erreur[iobs()].first,medianes);
             auto tie = bf::vector_tie(map_indice,jacob,v_erreur[iobs()].first,bundle,iobs,ba.h,ba.jte);
@@ -134,10 +133,10 @@ namespace lma
       mpl::for_each<typename Bundle::ListFunction, ttt::wrap<mpl::placeholders::_1>>(fh);
     }*/
     
-    template<class Derivator, class Bundle, class Ba, class MapErreur, class Medianes>
+    template<class Tag, class Bundle, class Ba, class MapErreur, class Medianes>
     void fill_hessien(const Bundle& bundle, Ba& ba, MapErreur& map_erreur, const Medianes& meds)
     {
-      FillHessien32<Derivator,Bundle,Ba,MapErreur,Medianes> fh(bundle,ba,map_erreur,meds);
+      FillHessien32<Tag,Bundle,Ba,MapErreur,Medianes> fh(bundle,ba,map_erreur,meds);
       mpl::for_each<typename Bundle::ListFunction, ttt::wrap<mpl::placeholders::_1>>(fh);
     }
   }// eon

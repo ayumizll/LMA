@@ -54,9 +54,12 @@ std::ostream& operator<<(std::ostream& o, std::tuple<double,double> tuple)
   return o << std::get<0>(tuple) << "," << std::get<1>(tuple) << std::endl;
 }
 
+struct None{};
+
 int main()
 {
   std::vector<double> obs = {0.1,0.2,-0.05,-0.15,0.0};
+  std::cout << solve<F<None>>(1,1,obs) << std::endl;
   std::cout << solve<F<NumericCentral>>(1,1,obs) << std::endl;
   std::cout << solve<F<NumericForward>>(1,1,obs) << std::endl;
   std::cout << solve<F<Analytical>>(1,1,obs) << std::endl;
