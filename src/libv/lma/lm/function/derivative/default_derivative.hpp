@@ -26,12 +26,14 @@
 namespace lma
 {
   template<class Obs> struct IfDerivativeIsNotChoosen :
-          boost::mpl::not_<boost::mpl::or_<
-                            boost::is_convertible<Obs*,NumericForward*>,
-                            boost::is_convertible<Obs*,NumericCentral*>,
-                            boost::is_convertible<Obs*,Analytical*>,
-                            boost::is_convertible<Obs*,Automatic*>
-                          >> {};
+    boost::mpl::not_<
+      boost::mpl::or_<
+                      boost::is_convertible<Obs*,NumericForward*>,
+                      boost::is_convertible<Obs*,NumericCentral*>,
+                      boost::is_convertible<Obs*,Analytical*>,
+                      boost::is_convertible<Obs*,Automatic*>
+                     >
+                    > {};
 
   template<class ... T> void plz_no_warning(T...){}
   
@@ -41,7 +43,6 @@ namespace lma
   template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
   void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur& error, typename EnableIfConvertible<Fonctor,NumericForward>::type* =0) // numeric forward
   {
-    std::cout << "1";
     NumericalDerivator<Tag>::derive(fonctor,tuple,result,error);
   }
   
@@ -54,21 +55,18 @@ namespace lma
                                                >
                              >::type* =0) // numeric central
   {
-    std::cout << "2";
     NumericalDerivator<Tag>::derive(fonctor,tuple,result);
   }
 
   template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
   void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,Analytical>::type* =0) // analytic
   {
-    std::cout << "4";
     AnalyticalDerivator<Tag>::derive(fonctor,tuple,result);
   }
 
   template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
   void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,Automatic>::type* =0) // analytic
   {
-    std::cout << "5";
     #if __cplusplus > 201103L
       AutomaticDerivator<Tag>::derive(fonctor,tuple,result);
     #else
