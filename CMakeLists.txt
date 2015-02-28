@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(libv-lma)
 
-add_definitions(-std=gnu++11)
+add_definitions(-std=gnu++11 -O3)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 

@@ -16,6 +16,8 @@
 //#define USE_TOON
 #include <libv/lma/lma.hpp>
 
+#include <unsupported/Eigen/MatrixFunctions>
+
 struct Camera
 {
   Eigen::Matrix3d rotation;
@@ -28,10 +30,7 @@ struct Camera
     // update a rotation according using exponential map
     Eigen::Matrix3d r;
     r << 0,-delta[2], delta[1],delta[2],0,-delta[0],-delta[1],delta[0],0;
-    const double 
-      theta2 = r(0,1)*r(0,1) + r(0,2)*r(0,2) +  r(1,2)*r(1,2) + std::numeric_limits<double>::epsilon(),
-      theta = std::sqrt(theta2);
-    rotation *= Eigen::Matrix3d::Identity() + boost::math::sinc_pi(theta)*r+(1.0-std::cos(theta))/theta2*r*r;
+    rotation *= r.exp();
     translation.x() += delta[3];
     translation.y() += delta[4];
     translation.z() += delta[5];
