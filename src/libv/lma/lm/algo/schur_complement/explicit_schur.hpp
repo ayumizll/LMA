@@ -180,6 +180,7 @@ namespace lma
 
     using parent::save_h;
     using parent::reload_h;
+    using parent::get_vs;
 
     void solve(Ba& ba_, Bundle& bundle_)
     {

@@ -100,6 +100,8 @@ namespace lma
     ImplicitSchur(Config config):norm_eq(config) {}
     
     
+	const typename SchurCont::TupleVs& get_vs() const { return schur_.save_vs;}
+	
     void init(Bundle& bundle_, Ba&)
     {
       initialize(bundle_,schur_);
