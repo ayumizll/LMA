@@ -7,14 +7,12 @@
 //==============================================================================
 
 #include <libv/lma/lma.hpp>
-#include <libv/core/miscmath.hpp>
 
 using namespace lma;
 
 int main()
 {
-  auto rosenbrock = [](double x, double y){ return v::pow<2>(1-x) + 100*v::pow<2>(y - v::pow<2>(x)); };
-  auto functor = [&rosenbrock](double x, double y, double& r){ r = rosenbrock(x,y); return true; };
+  auto functor = [](double x, double y, double& r){ r = x*x + 100*(y - x*x)*(y - x*x); return true; };
   // Initial solution
   double x(-1),y(-1);
   std::cout << " Initial parameters   : (" << x << "," << y << ") with an error of " << rosenbrock(x,y) <<  std::endl;
