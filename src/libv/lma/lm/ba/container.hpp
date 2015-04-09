@@ -73,7 +73,7 @@ namespace lma {
         for(auto& x : v)
           for(size_t k = 0 ; k < I ; ++k)
           {
-            if (std::isnan(x[k])) 
+            if (!lma::contains_nan(x[k])) 
             {
               std::cout << x << std::endl;
               return true;

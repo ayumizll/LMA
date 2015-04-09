@@ -91,7 +91,7 @@ int main()
 
   typedef Solver<F1,F2> Solver;
   solve<Solver>(DENSE,v0,v1,v2,v3);
-  solve<Solver>(IMPLIC_SCHUR2,v0,v1,v2,v3);
+  solve<Solver>(IMPLICIT_SCHUR2,v0,v1,v2,v3);
   solve<Solver>(SPARSE_SCHUR2,v0,v1,v2,v3);
   return 0;
 }

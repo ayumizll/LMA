@@ -120,7 +120,7 @@ namespace lma
         assert( (&ref_objet == &ttt::to_ref(bf::at_c<K>(tuple).second)) );
 
         typedef typename Fonction::ErreurType Residu;
-        Residu r1,r2;
+        Residu r2;
         
         auto backup = back_up<I>(ref_objet);
         detail::internal_apply_small_increment(ref_objet,h,v::numeric_tag<I>());
@@ -129,6 +129,7 @@ namespace lma
         if (b2)
         {
           detail::internal_apply_small_increment(ref_objet,-h,v::numeric_tag<I>());
+          Residu r1;
           bool b1 = fonction(tuple,r1);
           backup.restore();
           

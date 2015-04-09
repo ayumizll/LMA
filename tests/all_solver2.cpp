@@ -133,8 +133,8 @@ int main()
   solve<Solver,SPARSE_SCHUR_>(a,b,c,d,e);
   solve<Solver,SPARSE_SCHUR2_>(a,b,c,d,e);
 
-  solve<Solver,IMPLIC_SCHUR_>(a,b,c,d,e);
-  solve<Solver,IMPLIC_SCHUR2_>(a,b,c,d,e);
+  solve<Solver,IMPLICIT_SCHUR_>(a,b,c,d,e);
+  solve<Solver,IMPLICIT_SCHUR2_>(a,b,c,d,e);
 
   return 0;
 }

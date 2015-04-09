@@ -54,36 +54,32 @@ namespace lma
       
       if ((errors[iobs()].second = make_function(bundle.obs(iobs))(bundle.map(iobs),errors[iobs()].first)))
       {
-#ifndef NDEBUG
-        if (std::isnan(squared_norm(errors[iobs()].first)))
-        {
-          std::cout << " Nan found in " << ttt::name<Obs>() << std::endl;
-          throw NAN_ERROR(" NAN : cost_and_save");
-        }
-#endif
         auto tmp = errors[iobs()].first;
+
+        // if (lma::contains_nan(tmp))
+        // {
+        //   std::cerr << " PROBLEM : " << tmp << std::endl;
+        //   std::string msg = std::string() + " [1] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
+        //   throw NAN_ERROR(msg);
+        // }
+
         detail::apply_mestimator_erreur<Obs>(bundle.obs(iobs),tmp,mad);
         total += squared_norm(tmp);
+
+      // if (contains_nan(total))
+      // {
+      //   std::string msg = std::string() + " [2] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
+      //   throw NAN_ERROR(msg);
+      // }
       }
     }
 
-    if (std::isnan(total))
-//     {
-//       double x = 0;
-//       for(auto& tmp : errors)
-//       {
-//         if (tmp.second)
-//         {
-//           std::cout << tmp.first << " " << x << " -> ";
-//           x+=squared_norm(tmp.first);
-//           std::cout << x << std::endl;
-//         }
-//       }
-//     
-//       std::cout << " Nan found in " << ttt::name<Obs>() << std::endl;
-//       
-      throw NAN_ERROR(" NAN : total cost_and_save");
-//     }
+    if (contains_nan(total))
+    {
+      std::string msg = std::string() + " NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
+      throw NAN_ERROR(msg);
+    }
+
     return total / 2.0;
   }
 
@@ -162,9 +158,9 @@ namespace lma
       std::vector<double> norms;
       cost_and_save_mad_<Obs,Bundle>(bundle,norms);
       
-      //std::cout << color.bold() << "\n Mad " << ttt::name<Obs>() << " : ";
+      // std::cout << color.bold() << "\n Mad " << ttt::name<Obs>() << " : ";
       bf::at_key<Obs>(meds) = bundle.template at_obs<Obs>()(0).compute(norms);
-      //std::cout << color.reset();
+      // std::cout << color.reset();
     }
   };
 

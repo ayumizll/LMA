@@ -27,13 +27,15 @@ struct Camera
 
   void apply_rotation(const double delta[9])
   {
-    // update a rotation according using exponential map
+    // update rotation using exponential map
     Eigen::Matrix3d r;
     r << 0,-delta[2], delta[1],delta[2],0,-delta[0],-delta[1],delta[0],0;
     rotation *= r.exp();
+    // update translation
     translation.x() += delta[3];
     translation.y() += delta[4];
     translation.z() += delta[5];
+    // update instrinsics
     a += delta[6];
     b += delta[7];
     c += delta[8];

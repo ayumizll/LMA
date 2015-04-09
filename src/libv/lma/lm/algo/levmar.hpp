@@ -169,7 +169,8 @@ namespace lma
         previous_erreur_ = erreur_;
       erreur_ =  cost_and_save(bundle_,map_erreur,meds);
       if (erreur_==-1)
-	std::cout << " erreur_ " << erreur_ << " " << previous_erreur_ << std::endl;
+	     std::cerr << " LMA::compute_erreur " << erreur_ << " " << previous_erreur_ << std::endl;
+      assert(erreur_!=-1.0);
       residual_evaluations += free_tic.toc();
       return erreur_;
     }

@@ -16,6 +16,7 @@
 #define __TTT_TRAITS_FUNCTION_DISPATCH_HPP__
 
 #include "../fusion/at.hpp"
+#include <boost/fusion/include/at_c.hpp>
 #include "functor_trait.hpp"
 #include "to_ref.hpp"
 #include <libv/lma/ttt/traits/int.hpp>

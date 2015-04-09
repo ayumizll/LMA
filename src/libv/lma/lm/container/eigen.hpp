@@ -103,11 +103,12 @@ namespace lma
     }
   };
   
+
   template<class T, int I, int J>
   bool contains_nan(const Eigen::Matrix<T,I,J>& mat)
   {
     for(int k = 0 ; k < mat.size() ; ++k)
-      if (std::isnan(mat(k)))
+      if (contains_nan(mat(k)))
         return true;
     return false;
   }

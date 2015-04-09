@@ -101,8 +101,8 @@ int main()
   solve<Solver,SPARSE_SCHUR_>(v0,v1,v2,v3);
   solve<Solver,SPARSE_SCHUR2_>(v0,v1,v2,v3);
 
-  solve<Solver,IMPLIC_SCHUR_>(v0,v1,v2,v3);
-  solve<Solver,IMPLIC_SCHUR2_>(v0,v1,v2,v3);
+  solve<Solver,IMPLICIT_SCHUR_>(v0,v1,v2,v3);
+  solve<Solver,IMPLICIT_SCHUR2_>(v0,v1,v2,v3);
 
 
   return 0;
