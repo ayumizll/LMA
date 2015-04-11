@@ -225,7 +225,7 @@ namespace lma
     void compute_delta_a(Ba& ba_)
     {
       Tic tic("Compute DA");
-      parent::norm_eq.template operator()<MatrixTag>(BABYS<Ba,SchurCont,ParentSchur>(ba_,schur_,parent::schur_),ba_.delta);
+      parent::norm_eq(BABYS<Ba,SchurCont,ParentSchur>(ba_,schur_,parent::schur_),ba_.delta,MatrixTag());
       tic.disp();
     }
   };

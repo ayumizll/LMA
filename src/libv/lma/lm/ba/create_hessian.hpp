@@ -53,7 +53,7 @@ namespace lma
 
   template<class List, class Int, class Result> struct CreatePairs2_ : For<Int::value+1,mpl::size<List>::value,List,CreatePairs3<Int>,Result> {};
 
-  template<class L> using CreatePairs2 = CreatePairs2_<mpl::_1,mpl::_2,mpl::_3>;
+  template<class L> using CreatePairs2 = CreatePairs2_<L,mpl::_2,mpl::_3>;
 
   template<class T> struct Unique : mpl::unique<T, boost::is_same<mpl::_1,mpl::_2> > {};// ne retire que les doublons contigus
 

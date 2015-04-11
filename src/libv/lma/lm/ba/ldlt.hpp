@@ -69,7 +69,7 @@ namespace lma
         ldlt_solve(x,a,b);
 
 #ifndef NDEBUG
-        if (contains_nan(x)) throw NAN_ERROR("Ldlt : delta contains nan");
+        if (is_invalid(x)) throw NAN_ERROR("Ldlt : delta contains nan");
 #endif
         int cpt = 0;
         mpl::for_each<typename Container::OptimizeKeys,ttt::wrap<mpl::_1>>(assign_delta(delta,x,cpt));
@@ -86,14 +86,14 @@ namespace lma
         auto& d = bf::front(delta).second;
         
         if (h.size() == h.v.size()) // matrice diagonale par block
-	{
-	  for(auto i = h.first() ; i < h.size() ; ++i)
-	    d(i) = h(i).llt().solve(jte(i));
-	}
-	else
-	{
-	  LDLT<false>::compute(container,delta);
-	}
+      	{
+      	  for(auto i = h.first() ; i < h.size() ; ++i)
+      	    d(i) = h(i).llt().solve(jte(i));
+      	}
+      	else
+      	{
+      	  LDLT<false>::compute(container,delta);
+      	}
       }
     };
   }
@@ -103,10 +103,10 @@ namespace lma
     template<class Config>
     LDLT(Config){}
 
-    template<class Float, class Container, class Delta, size_t TotalFParams = 1>
-    void operator()(const Container& container, Delta& delta) const
+    template<class MatrixTag, class Container, class Delta, size_t TotalFParams = 1>
+    void operator()(const Container& container, Delta& delta, const MatrixTag&) const
     {
-      internal::LDLT< IsDiagonal<Container>::value >::template compute<Float>(container,delta);
+      internal::LDLT< IsDiagonal<Container>::value >::template compute<MatrixTag>(container,delta);
     }
   };
 

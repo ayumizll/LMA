@@ -123,7 +123,7 @@ namespace lma
       Float MAD = mediane(norms);
       
       Float C = med + coeff_mad * MAD;
-      //std::cout << " C : " << C << " = " << med << " + " << coeff_mad << " * " << MAD << std::endl;
+      // std::cout << " C : " << C << " = " << med << " + " << coeff_mad << " * " << MAD << std::endl;
       return C;
     }
   };

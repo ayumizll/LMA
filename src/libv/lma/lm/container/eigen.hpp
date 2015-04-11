@@ -48,18 +48,18 @@ namespace lma
     typedef Eigen::Matrix<Float,Eigen::Dynamic,1> MatrixD1;
   };
 
-  template<class Float, int Rows, int Cols>
-  constexpr int rows(const Eigen::Matrix<Float,Rows,Cols>&)
+  template<class> struct Rows;
+  template<class Float, int Rows, int Cols> struct Rows<Eigen::Matrix<Float,Rows,Cols>>
   {
-    return Rows;
-  }
-  
-  template<class Float, int Rows, int Cols>
-  constexpr int cols(const Eigen::Matrix<Float,Rows,Cols>&)
+    enum { value = Rows };
+  };
+
+  template<class> struct Cols;
+  template<class Float, int Rows, int Cols> struct Cols<Eigen::Matrix<Float,Rows,Cols>>
   {
-    return Cols;
-  }
-  
+    enum { value = Cols };
+  };
+
 ////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////
@@ -105,10 +105,10 @@ namespace lma
   
 
   template<class T, int I, int J>
-  bool contains_nan(const Eigen::Matrix<T,I,J>& mat)
+  bool is_invalid(const Eigen::Matrix<T,I,J>& mat)
   {
     for(int k = 0 ; k < mat.size() ; ++k)
-      if (contains_nan(mat(k)))
+      if (is_invalid(mat(k)))
         return true;
     return false;
   }

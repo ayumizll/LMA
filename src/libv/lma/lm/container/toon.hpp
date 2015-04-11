@@ -150,20 +150,20 @@ namespace lma
   }
   
   template<class Float, int I, int J>
-  bool contains_nan(const TooN::Matrix<I,J,Float>& mat)
+  bool is_invalid(const TooN::Matrix<I,J,Float>& mat)
   {
     for(int i = 0 ; i < I ; ++i)
       for(int j = 0 ; j < J ; ++j)
-      if (std::isnan(mat(i,j)))
+      if (is_invalid(mat(i,j)))
         return true;
     return false;
   }
   
   template<class Float>
-  bool contains_nan(const TooN::Vector<TooN::Dynamic,Float>& mat)
+  bool is_invalid(const TooN::Vector<TooN::Dynamic,Float>& mat)
   {
     for(int i = 0 ; i < mat.size() ; ++i)
-      if (std::isnan(mat[i]))
+      if (is_invalid(mat[i]))
         return true;
     return false;
   }

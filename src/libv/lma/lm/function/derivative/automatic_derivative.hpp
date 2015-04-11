@@ -86,8 +86,9 @@ namespace lma
     _unroll(ttt::Int<DDL>,const Fun& fun, ttt::Int<I> const&, ttt::Int<F> const&, AD& ad, Result& result, const Tuple& tuple)
     {
       auto& jacob = bf::at_c<I>(result).second;
-      assert( Fun::erreur_size() == rows(jacob) );
-      double_unroll(ttt::Int<rows(jacob)>(),ttt::Int<cols(jacob)>(),ad2jacob<DDL>(jacob,ad));
+      typedef typename std::decay<decltype(jacob)>::type Jacob;
+      assert( Fun::erreur_size() == Rows<Jacob>::value );
+      double_unroll(ttt::Int<Rows<Jacob>::value>(),ttt::Int<Cols<Jacob>::value>(),ad2jacob<DDL>(jacob,ad));
       _unroll(Int<DDL+Size<decltype(bf::at_c<I>(tuple).second)>::value>(),fun,ttt::Int<I+1>(),ttt::Int<F>(),ad,result,tuple);
     }
 

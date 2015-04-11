@@ -68,12 +68,12 @@ namespace lma {
 
       void set_zero() { for(auto& x : v) x = MatrixMaker::Zero();}
 
-      bool contains_nan() const
+      bool is_invalid() const
       {
         for(auto& x : v)
           for(size_t k = 0 ; k < I ; ++k)
           {
-            if (!lma::contains_nan(x[k])) 
+            if (!lma::is_invalid(x[k])) 
             {
               std::cout << x << std::endl;
               return true;
@@ -258,11 +258,11 @@ namespace lma {
       }
 
       
-      bool contains_nan() const
+      bool is_invalid() const
       {
         for(auto& x : v)
           for(size_t k = 0 ; k < I ; ++k)
-            if (std::isnan(x(k))) return true;
+            if (is_invalid(x(k))) return true;
         return false;
       }
 

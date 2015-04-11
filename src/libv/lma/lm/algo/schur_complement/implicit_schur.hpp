@@ -98,9 +98,8 @@ namespace lma
     
     template<class Config>
     ImplicitSchur(Config config):norm_eq(config) {}
-    
-    
-	const typename SchurCont::TupleVs& get_vs() const { return schur_.save_vs;}
+
+	  const typename SchurCont::TupleVs& get_vs() const { return schur_.save_vs;}
 	
     void init(Bundle& bundle_, Ba&)
     {
@@ -159,7 +158,7 @@ namespace lma
     void compute_delta_a(Ba& ba_)
     {
       Tic tic("Compute DA");
-      norm_eq.template operator()<MatrixTag>(BABY2<Ba,SchurCont>(ba_,schur_),ba_.delta);
+      norm_eq(BABY2<Ba,SchurCont>(ba_,schur_),ba_.delta,MatrixTag());
       tic.disp();
     }
 

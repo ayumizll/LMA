@@ -56,7 +56,7 @@ namespace lma
       {
         auto tmp = errors[iobs()].first;
 
-        // if (lma::contains_nan(tmp))
+        // if (lma::is_invalid(tmp))
         // {
         //   std::cerr << " PROBLEM : " << tmp << std::endl;
         //   std::string msg = std::string() + " [1] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
@@ -66,7 +66,7 @@ namespace lma
         detail::apply_mestimator_erreur<Obs>(bundle.obs(iobs),tmp,mad);
         total += squared_norm(tmp);
 
-      // if (contains_nan(total))
+      // if (is_invalid(total))
       // {
       //   std::string msg = std::string() + " [2] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
       //   throw NAN_ERROR(msg);
@@ -74,8 +74,9 @@ namespace lma
       }
     }
 
-    if (contains_nan(total))
+    if (is_invalid(total))
     {
+      std::cout << " Erreur : " << total << std::endl;
       std::string msg = std::string() + " NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
       throw NAN_ERROR(msg);
     }

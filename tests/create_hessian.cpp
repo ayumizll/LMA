@@ -1,4 +1,4 @@
-#include <libv/lma/optimisation2/ba/create_hessian.hpp>
+#include <libv/lma/lm/ba/create_hessian.hpp>
 #include <iostream>
 
 using namespace lma;

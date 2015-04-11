@@ -25,7 +25,7 @@
 
 namespace lma
 {
-  inline bool contains_nan(double d) { return !std::isfinite(d) || std::isnan(d) || std::isinf(d);}
+  inline bool is_invalid(double d) { return !std::isfinite(d);}
 
   template<class Tag, std::size_t I, std::size_t J> struct ContainerOption {};
   

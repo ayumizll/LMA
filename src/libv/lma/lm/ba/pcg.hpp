@@ -200,7 +200,7 @@ namespace lma
       }
       refa = refb;
       
-      assert(!refa.contains_nan());
+      assert(!refa.is_invalid());
       
     }
   };
@@ -269,7 +269,7 @@ namespace lma
     PCG(PcgConfig config):PcgConfig(config) {}
     
     template<class Tag, class Container, class Delta>
-    void operator()(const Container& cont, Delta& delta)
+    void operator()(const Container& cont, Delta& delta, const Tag&)
     {
       //Pour la notation et la méthode cf Méthode numérique appliquées, A. Gourdin, M. Boumahrat : page 258,259
       constexpr bool disp = false;

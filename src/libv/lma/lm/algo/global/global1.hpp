@@ -70,7 +70,7 @@ namespace lma
 
       void solve(Ba& ba_, Bundle&)
       {
-        norm_eq.template operator()<MatrixTag>(HDJ<Ba>(ba_),ba_.delta);
+        norm_eq(HDJ<Ba>(ba_),ba_.delta,MatrixTag());
       }
 
       void save_h(Hessian&){}
