@@ -108,6 +108,7 @@ namespace lma
 
     double prev_lambda;
     double erreur_,previous_erreur_;
+    double nb_used_fonctor;
 
     typedef MultiContainer<typename Bundle::ListFunction,MakeResidualVector<mpl::_1>> ContainerMapErreur;
 
@@ -162,17 +163,17 @@ namespace lma
     }
 
     
-    double compute_erreur(const Bundle& bundle_)
+    std::pair<double,int> compute_erreur(const Bundle& bundle_)
     {
       free_tic.tic();
       if (erreur_!=-1.0)
         previous_erreur_ = erreur_;
-      erreur_ =  cost_and_save(bundle_,map_erreur,meds);
+      std::tie(erreur_,nb_used_fonctor) =  cost_and_save(bundle_,map_erreur,meds);
       if (erreur_==-1)
 	     std::cerr << " LMA::compute_erreur " << erreur_ << " " << previous_erreur_ << std::endl;
       assert(erreur_!=-1.0);
       residual_evaluations += free_tic.toc();
-      return erreur_;
+      return {erreur_,nb_used_fonctor};
     }
 
     double compute_scale(double lambda) const

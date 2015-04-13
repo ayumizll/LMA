@@ -41,47 +41,34 @@ namespace std
 namespace lma
 {
 
-  template<class Obs, class Bundle, class VErreur, class Mad> double cost_and_save_(const Bundle& bundle, VErreur& errors, const Mad& mad)
+  template<class Obs, class Bundle, class VErreur, class Mad> std::pair<double,int> cost_and_save_(const Bundle& bundle, VErreur& errors, const Mad& mad)
   {
     const auto nb_obs = bundle.template at_obs<Obs>().size();
-    if (nb_obs==0) return 0;
+    if (nb_obs==0) return {0,0};
     errors.resize(nb_obs());
-    double total = 0;
-
-// #pragma omp parallel for reduction(+:total) if(use_omp())
+    double error = 0;
+    size_t cpt = 0;
+// #pragma omp parallel for reduction(+:error) if(use_omp())
     for(auto iobs = bundle.template at_obs<Obs>().first() ; iobs < nb_obs ; ++iobs)
     {
       
       if ((errors[iobs()].second = make_function(bundle.obs(iobs))(bundle.map(iobs),errors[iobs()].first)))
       {
         auto tmp = errors[iobs()].first;
-
-        // if (lma::is_invalid(tmp))
-        // {
-        //   std::cerr << " PROBLEM : " << tmp << std::endl;
-        //   std::string msg = std::string() + " [1] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
-        //   throw NAN_ERROR(msg);
-        // }
-
         detail::apply_mestimator_erreur<Obs>(bundle.obs(iobs),tmp,mad);
-        total += squared_norm(tmp);
-
-      // if (is_invalid(total))
-      // {
-      //   std::string msg = std::string() + " [2] NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
-      //   throw NAN_ERROR(msg);
-      // }
+        error += squared_norm(tmp);
+        cpt ++;
       }
     }
 
-    if (is_invalid(total))
+    if (is_invalid(error))
     {
-      std::cout << " Erreur : " << total << std::endl;
+      std::cout << " Erreur : " << error << std::endl;
       std::string msg = std::string() + " NAN : cost_and_save in functor " + ttt::name<Obs>() + ".";
       throw NAN_ERROR(msg);
     }
 
-    return total / 2.0;
+    return std::make_pair(error / 2.0, cpt);
   }
 
 
@@ -90,21 +77,23 @@ namespace lma
     const Bundle& bundle;
     MapErreur& map_erreur;
     const Meds& meds;
-    double sum;
+    std::pair<double,int> sumcpt;
     
-    CosterSave(const Bundle& bundle_, MapErreur& map_erreur_, const Meds& meds_):bundle(bundle_),map_erreur(map_erreur_),meds(meds_),sum(0){}
+    CosterSave(const Bundle& bundle_, MapErreur& map_erreur_, const Meds& meds_):bundle(bundle_),map_erreur(map_erreur_),meds(meds_),sumcpt({0,0}){}
 
     template<class Obs> void operator()(ttt::wrap<Obs>)
     {
-      sum += cost_and_save_<Obs,Bundle>(bundle,map_erreur.template at_key<Obs>(),meds);
+      auto pair = cost_and_save_<Obs,Bundle>(bundle,map_erreur.template at_key<Obs>(),meds);
+      sumcpt.first += pair.first;
+      sumcpt.second += pair.second;
     }
   };
 
-  template<class Bundle, class MapErreur, class Meds> double cost_and_save(const Bundle& bundle, MapErreur& map_erreur, const Meds& meds)
+  template<class Bundle, class MapErreur, class Meds> std::pair<double,int> cost_and_save(const Bundle& bundle, MapErreur& map_erreur, const Meds& meds)
   {
     CosterSave<Bundle,MapErreur,Meds> coster(bundle,map_erreur,meds);
     mpl::for_each<typename Bundle::ListFunction, ttt::wrap<mpl::placeholders::_1>>(boost::ref(coster));
-    return coster.sum;
+    return coster.sumcpt;
   }
 
   

@@ -98,11 +98,11 @@ namespace lma
       auto save_container = bundle.clone_opt_container();
       rms1 = algo.get_erreur();
       algo.compute(bundle,lambda,is_better);
-      rms2 = algo.compute_erreur(bundle);
+      double nb_obs = 0;
+      std::tie(rms2,nb_obs) = algo.compute_erreur(bundle);
 
       double rho = (rms1-rms2)*2.0 / (algo.compute_scale(lambda) + 1e-3);
 
-      double nb_obs = bundle.nb_obs();
       if(rms2 > rms1)
       {
         algo.restore_erreur();
