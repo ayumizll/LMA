@@ -142,6 +142,15 @@ namespace lma
     -> decltype(this->at<Key>().at(indice()))
     { return this->at<Key>().at(indice()); }
     
+
+    template<class Obs> struct ToTuple
+    {
+      typedef typename br::at_key<Container,Obs>::type vector_ref;
+      typedef typename std::decay<vector_ref>::type vector;
+      typedef typename vector::value_type value_type;
+      typedef typename value_type::first_type type;
+    };
+
     template<class Key>
     auto indices(ttt::Indice<Key> indice)
     -> decltype(this->pair(indice).first)
@@ -262,13 +271,12 @@ namespace lma
     
     template<class Obs> void operator()(ttt::wrap<Obs>)
     {
-      decltype(bundle.spi2.indices(ttt::Indice<Obs>(0))) tuple;
+      typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
       for(size_t i = 0 ; i < vector.size() ; ++i)
       {
         // tuple d'adresses -> tuple d'indices
         copy_f(tuple,vector[i],AdressToIndice<Set>(set));
-        
         detail::AddTuple::add<Obs>(bundle,tuple);
       }
     }
@@ -282,7 +290,7 @@ namespace lma
     
     template<class Obs> void operator()(ttt::wrap<Obs>)
     {
-      decltype(bundle.spi2.indices(ttt::Indice<Obs>(0))) tuple;
+      typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
       for(size_t i = 0 ; i < vector.size() ; ++i)
       {
