@@ -12,8 +12,8 @@ double rosenbrock(double x, double y)
 
 template<class F> void solve(F f)
 {
-  double x(-1),y(-1);
-  Solver<F>(1,10).add(f,&x,&y).solve(DENSE,enable_verbose_output());
+  double x[2] ={-1,-1};
+  Solver<F>(1,10).add(f,&x[0],&x[1]).solve(DENSE,enable_verbose_output());
 }
 
 template<class R> struct Fonctor

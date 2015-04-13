@@ -41,23 +41,23 @@ namespace lma
   typedef ImplPcg       <Eig,double,2>   EIGEN_IMPLICIT_SCHUR2_;
 
   
-  static const DENSE_                     DENSE;
-  static const SPARSE_                    SPARSE;
-  static const DENSE_SCHUR_               DENSE_SCHUR;
-  static const SPARSE_SCHUR_              SPARSE_SCHUR;
-  static const IMPLICIT_SCHUR_            IMPLICIT_SCHUR;
-  static const DENSE_SCHUR2_              DENSE_SCHUR2;
-  static const SPARSE_SCHUR2_             SPARSE_SCHUR2;
-  static const IMPLICIT_SCHUR2_           IMPLICIT_SCHUR2;
+  static const DENSE_                     DENSE = {};
+  static const SPARSE_                    SPARSE = {};
+  static const DENSE_SCHUR_               DENSE_SCHUR = {};
+  static const SPARSE_SCHUR_              SPARSE_SCHUR = {};
+  static const IMPLICIT_SCHUR_            IMPLICIT_SCHUR = {};
+  static const DENSE_SCHUR2_              DENSE_SCHUR2 = {};
+  static const SPARSE_SCHUR2_             SPARSE_SCHUR2 = {};
+  static const IMPLICIT_SCHUR2_           IMPLICIT_SCHUR2 = {};
   
-  static const EIGEN_DENSE_               EIGEN_DENSE;
-  static const EIGEN_SPARSE_              EIGEN_SPARSE;
-  static const EIGEN_DENSE_SCHUR_         EIGEN_DENSE_SCHUR;
-  static const EIGEN_SPARSE_SCHUR_        EIGEN_SPARSE_SCHUR;
-  static const EIGEN_IMPLICIT_SCHUR_      EIGEN_IMPLICIT_SCHUR;
-  static const EIGEN_DENSE_SCHUR2_        EIGEN_DENSE_SCHUR2;
-  static const EIGEN_SPARSE_SCHUR2_       EIGEN_SPARSE_SCHUR2;
-  static const EIGEN_IMPLICIT_SCHUR2_     EIGEN_IMPLICIT_SCHUR2;
+  static const EIGEN_DENSE_               EIGEN_DENSE = {};
+  static const EIGEN_SPARSE_              EIGEN_SPARSE = {};
+  static const EIGEN_DENSE_SCHUR_         EIGEN_DENSE_SCHUR = {};
+  static const EIGEN_SPARSE_SCHUR_        EIGEN_SPARSE_SCHUR = {};
+  static const EIGEN_IMPLICIT_SCHUR_      EIGEN_IMPLICIT_SCHUR = {};
+  static const EIGEN_DENSE_SCHUR2_        EIGEN_DENSE_SCHUR2 = {};
+  static const EIGEN_SPARSE_SCHUR2_       EIGEN_SPARSE_SCHUR2 = {};
+  static const EIGEN_IMPLICIT_SCHUR2_     EIGEN_IMPLICIT_SCHUR2 = {};
 
 #ifdef USE_TOON
   typedef LdltTag       <Toon,double>    TOON_DENSE_;

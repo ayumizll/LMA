@@ -46,7 +46,7 @@ namespace lma
       obj.second.set_diag_inv(boost::fusion::at_key<Pair<Key,Key>>(s));
     }
 
-    template<class T> void operator()(T& obj) const {}
+    template<class T> void operator()(T&) const {}
   };
 
   template<class D, class S> void assign_same_diag_inv(D& d, const S& s)
@@ -272,7 +272,7 @@ namespace lma
     void operator()(const Container& cont, Delta& delta, const Tag&)
     {
       //Pour la notation et la méthode cf Méthode numérique appliquées, A. Gourdin, M. Boumahrat : page 258,259
-      constexpr bool disp = false;
+      static const bool disp = false;
 
       typedef typename Tag::second_type Float;
       typedef typename Container::OptimizeKeys ListeParametre;

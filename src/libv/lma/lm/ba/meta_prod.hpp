@@ -26,7 +26,7 @@
 
 namespace lma
 {
-  template<class> class Transpose;
+  template<class> struct Transpose;
 }
 
 namespace boost
