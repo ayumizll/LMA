@@ -1,5 +1,5 @@
 #include <iostream>
-#include <libv/lma/optimisation2/ba/meta_prod.hpp>
+#include <libv/lma/lm/ba/meta_prod.hpp>
 #include <libv/lma/ttt/fusion/pair.hpp>
 
 struct A{};

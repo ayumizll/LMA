@@ -26,6 +26,6 @@ int main()
   A a;
   B b;
   C c;
-  return (fun(bf::make_vector(bf::make_pair<A>(&a),bf::make_pair<B>(&b),bf::make_pair<C>(&c)),d) && d == 3.159 ? EXIT_SUCCESS : EXIT_FAILURE);
+  return (fun(bf::make_vector(&a,&b,&c),d) && d == 3.159 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 

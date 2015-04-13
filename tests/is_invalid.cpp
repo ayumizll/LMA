@@ -7,6 +7,7 @@ int main()
 {
 
   V_TEST_EQUAL(is_invalid(1.0),false);
+  V_TEST_EQUAL(is_invalid(-1.1456),false);
   V_TEST_EQUAL(is_invalid(0.0),false);
   V_TEST_EQUAL(is_invalid(1.0/0.),true);
   V_TEST_EQUAL(is_invalid(NAN),true);

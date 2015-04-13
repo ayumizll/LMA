@@ -5,7 +5,7 @@
 
 struct Foncteur1D
 {
-  template<std::size_t I> void operator()()
+  template<std::size_t I> void operator()(ttt::Int<I>)
   {
     std::cout << " 1D : I = " << I << std::endl;
   }

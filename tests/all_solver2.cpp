@@ -53,8 +53,8 @@ namespace lma
   template<> struct Size<D> { static const size_t value = 1; };
   template<> struct Size<E> { static const size_t value = 1; };
 
-  void apply_increment(Scalar& d, const double h[1], const Adl&) { d.x() = h[0]; }
-  void apply_small_increment(Scalar& d, double h, v::numeric_tag<0>, const Adl&) { d.x() = h; }
+  void apply_increment(Scalar& d, const double h[1], const Adl&) { d.x() += h[0]; }
+  void apply_small_increment(Scalar& d, double h, v::numeric_tag<0>, const Adl&) { d.x() += h; }
 }
 
 namespace ttt

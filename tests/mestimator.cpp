@@ -34,8 +34,8 @@ int main()
 {
   double x1(1);
   double x2(1);
-  Solver<F1> solver1;
-  Solver<F2> solver2;
+  Solver<F1> solver1(-1,100,0.999999);
+  Solver<F2> solver2(-1,100,0.999999);
   
   for(size_t i = 0 ; i < 100 ; ++i)
   {
@@ -49,10 +49,10 @@ int main()
     solver2.add(F2(100+ random(100.0)),&x2);
   }
 
-  solver1.solve(DENSE);
-  solver2.solve(DENSE);
+  solver1.solve(DENSE,enable_verbose_output());
+  solver2.solve(DENSE,enable_verbose_output());
   std::cout << " x1 = " << x1 << std::endl;
   std::cout << " x2 = " << x2 << std::endl;
   std::cout << std::abs(x1-x2) / (x1+x2) << std::endl;
-  return (std::abs(x1-x2) / (x1+x2) < 0.01 ? EXIT_SUCCESS : EXIT_FAILURE);
+  return (std::abs(x1-x2) / (x1+x2) < 0.02 ? EXIT_SUCCESS : EXIT_FAILURE);
 }

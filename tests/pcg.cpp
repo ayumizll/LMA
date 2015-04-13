@@ -1,8 +1,8 @@
 #include <iostream>
 #include <Eigen/IterativeLinearSolvers>
 
-#include <libv/lma/optimisation2/solver/solver.hpp>
-#include <libv/lma/optimisation2/solver/verbose.hpp>
+#include <libv/lma/lm/solver/solver.hpp>
+#include <libv/lma/lm/solver/verbose.hpp>
 
 using namespace Eigen;
 
