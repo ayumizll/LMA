@@ -48,13 +48,11 @@ namespace lma
     typedef Eigen::Matrix<Float,Eigen::Dynamic,1> MatrixD1;
   };
 
-  template<class> struct Rows;
   template<class Float, int Rows, int Cols> struct Rows<Eigen::Matrix<Float,Rows,Cols>>
   {
     enum { value = Rows };
   };
 
-  template<class> struct Cols;
   template<class Float, int Rows, int Cols> struct Cols<Eigen::Matrix<Float,Rows,Cols>>
   {
     enum { value = Cols };

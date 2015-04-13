@@ -46,19 +46,17 @@ namespace lma
   
   template<class Float, int N, class _> struct Size<TooN::Vector<N,Float,_>> { enum { value = N }; };
   template<class Float, int N, class _> struct Size<TooN::Matrix<N,1,Float,_>> { enum { value = N }; };
-  
-  template<class Float, int Rows, int Cols>
-  constexpr int rows(const TooN::Matrix<Rows,Cols,Float>&)
+
+  template<class Float, int Rows, int Cols> struct Rows<TooN::Matrix<Rows,Cols,Float>>
   {
-    return Rows;
-  }
+    enum { value = Rows };
+  };
+
   
-  template<class Float, int Rows, int Cols>
-  constexpr int cols(const TooN::Matrix<Rows,Cols,Float>&)
+  template<class Float, int Rows, int Cols> struct Cols<TooN::Matrix<Rows,Cols,Float>>>
   {
-    return Cols;
-  }
-  
+    enum { value = Cols };
+  };
 
   
   template<class Float, size_t N> TooN::Vector<int(N),const Float,TooN::Reference> make_view(const std::array<Float,N>& residual, ttt::wrap<boost::fusion::pair<Toon,Float>>)

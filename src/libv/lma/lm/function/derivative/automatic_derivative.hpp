@@ -69,7 +69,7 @@ namespace lma
     template<class Fun, size_t K, size_t I, size_t F, class Tuple, class Res, class ... R> static void 
     _unroll2(const Fun& fun, ttt::Int<K> const&, ttt::Int<I> const&, ttt::Int<F> const&, const Tuple& tuple, Res& res, R& ... r)
     {
-      auto tmp = to_adct<Fun::ddl(),K>(ttt::to_ref(bf::at_c<I>(tuple).second),Tag());
+      auto tmp = to_adct<Fun::ddl,K>(ttt::to_ref(bf::at_c<I>(tuple).second),Tag());
       _unroll2(fun,ttt::Int<K+Size<decltype(tmp)>::value>(),ttt::Int<I+1>(),ttt::Int<F>(),tuple,res,r...,ttt::to_ref(bf::at_c<I>(tuple).second),tmp._M_elems);
     }
     
@@ -87,7 +87,7 @@ namespace lma
     {
       auto& jacob = bf::at_c<I>(result).second;
       typedef typename std::decay<decltype(jacob)>::type Jacob;
-      assert( Fun::erreur_size() == Rows<Jacob>::value );
+      static_assert( int(Fun::erreur_size) == int(Rows<Jacob>::value), "AutomaticDerivative : matrix size doesn't match with error size." );
       double_unroll(ttt::Int<Rows<Jacob>::value>(),ttt::Int<Cols<Jacob>::value>(),ad2jacob<DDL>(jacob,ad));
       _unroll(Int<DDL+Size<decltype(bf::at_c<I>(tuple).second)>::value>(),fun,ttt::Int<I+1>(),ttt::Int<F>(),ad,result,tuple);
     }
@@ -95,8 +95,8 @@ namespace lma
     template<class Fonctor, class Tuple, class Jacob>
     static void derive(const Fonctor& fonctor, const Tuple& tuple, Jacob& result)
     {
-      static const size_t erreur_size = Fonctor::erreur_size();
-      static const size_t ddl = Fonctor::ddl();
+      static const size_t erreur_size = Fonctor::erreur_size;
+      static const size_t ddl = Fonctor::ddl;
       auto residual = to_adct_residual<ddl>(ttt::Int<erreur_size>(),Tag());
       _unroll2(fonctor,ttt::Int<0>(),ttt::Int<0>(),ttt::Int<mpl::size<Tuple>::value>(),tuple,residual);
       _unroll(Int<0>(),fonctor,ttt::Int<0>(),ttt::Int<mpl::size<Jacob>::value>(),residual,result,tuple);

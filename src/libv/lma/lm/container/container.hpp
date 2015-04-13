@@ -27,6 +27,10 @@ namespace lma
 {
   inline bool is_invalid(double d) { return !std::isfinite(d);}
 
+  template<class> struct Rows;
+  template<class> struct Cols;
+  
+
   template<class Tag, std::size_t I, std::size_t J> struct ContainerOption {};
   
   template<class Tag, std::size_t X, std::size_t Y> struct Blocker;
