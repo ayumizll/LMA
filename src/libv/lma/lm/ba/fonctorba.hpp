@@ -39,35 +39,33 @@
 
 namespace lma
 {
-  template<class A, class B, class Flt, class _, class I, class J> auto to_block(Table<A,B,Flt,_>& table, I i, J j)
-  -> decltype(table(i,j))
+  template<class A, class B, class Flt, class _, class I, class J> typename Table<A,B,Flt,_>::Matrix& to_block(Table<A,B,Flt,_>& table, I i, J j)
   {
     return table(i,j);
   }
   
-  template<class A, class B, class Flt, class I, class J> auto to_block(Table<A,B,Flt,Diagonal>& table, I i, J)
-  -> decltype(table(i))
+  template<class A, class B, class Flt, class I, class J> typename Table<A,B,Flt,Diagonal>::Matrix& to_block(Table<A,B,Flt,Diagonal>& table, I i, J)
   {
     return table(i);
   }
+
   // Helping accessors
   template<class Key, class Map>
-  auto at_h(Map& h, const ttt::Indice<Key>& indice)
-  -> decltype(to_block(bf::at_key<bf::pair<Key,Key>>(h),indice,0))
+  typename br::value_at_key<Map,bf::pair<Key,Key>>::type::Matrix&
+   at_h(Map& h, const ttt::Indice<Key>& indice)
   {
     return to_block(bf::at_key<bf::pair<Key,Key>>(h),indice,0);
   }
   
   template<class Key1, class Key2, class Map>
-  auto at_h(Map& h, const ttt::Indice<Key1>& indice, const ttt::Indice<bf::pair<Key2,Key1>>& isparse)
-  -> decltype(to_block(bf::at_key<bf::pair<Key1,Key2>>(h),indice,isparse))
+  typename br::value_at_key<Map,bf::pair<Key1,Key2>>::type::Matrix&
+   at_h(Map& h, const ttt::Indice<Key1>& indice, const ttt::Indice<bf::pair<Key2,Key1>>& isparse)
   {
     return to_block(bf::at_key<bf::pair<Key1,Key2>>(h),indice,isparse);
   }
   
   template<class Key, class Map>
-  auto at_jte(Map& jte, const ttt::Indice<Key>& indice)
-  -> decltype(bf::at_key<Key>(jte)(indice))
+  typename br::value_at_key<Map,Key>::type::Matrix& at_jte(Map& jte, const ttt::Indice<Key>& indice)
   {
     return bf::at_key<Key>(jte)(indice);
   }

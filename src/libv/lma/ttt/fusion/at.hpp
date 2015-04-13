@@ -20,8 +20,19 @@
 
 namespace ttt
 {
-  template<class A, class B, class Container> auto at(const Container& container) -> decltype(bf::at_key<B>(bf::at_key<A>(container)))
+  template<class Map,class Key1, class Key2> struct BinaryAt
   {
+    typedef typename br::value_at_key<Map,Key2>::type Map2;
+    typedef typename br::value_at_key<Map2,Key1>::type type;
+    typedef typename boost::add_reference<type>::type type_ref;
+    typedef typename boost::add_const<type>::type const_type;
+    typedef typename boost::add_reference<const_type>::type const_ref_type;
+  };
+
+  template<class A, class B, class Container> 
+  typename BinaryAt<Container,B,A>::const_ref_type at(const Container& container)
+  {
+    BOOST_MPL_ASSERT((boost::is_same<decltype(bf::at_key<B>(bf::at_key<A>(container))),typename BinaryAt<Container,B,A>::const_ref_type>));
     return bf::at_key<B>(bf::at_key<A>(container));
   }
 }

@@ -132,66 +132,103 @@ namespace lma
      *                            > 
      *        >
      */
-    template<class Key> 
-    auto at() // ne pas nommé "vector", car ambiguité avec bf::vector
-    -> decltype(bf::at_key<Key>(container))
-    { return bf::at_key<Key>(container); }
-    
-    template<class Key>
-    auto pair(ttt::Indice<Key> indice)
-    -> decltype(this->at<Key>().at(indice()))
-    { return this->at<Key>().at(indice()); }
-    
+
+    template<class Obs> struct ToVector
+    {
+      typedef typename br::at_key<Container,Obs>::type type;
+      typedef typename std::decay<type>::type naked_type;
+      typedef typename boost::add_const<naked_type>::type const_type;
+      typedef typename boost::add_reference<const_type>::type const_ref_type;
+    };
 
     template<class Obs> struct ToTuple
     {
-      typedef typename br::at_key<Container,Obs>::type vector_ref;
+      typedef typename ToVector<Obs>::type vector_ref;
       typedef typename std::decay<vector_ref>::type vector;
       typedef typename vector::value_type value_type;
-      typedef typename value_type::first_type type;
+
+      typedef typename boost::add_const<value_type>::type const_type;
+      typedef typename boost::add_reference<const_type>::type const_ref_type;
+
+      typedef typename boost::add_reference<value_type>::type type_ref;
+
     };
 
+    template<class Obs> struct ToTupleElement : ToTuple<Obs>
+    {
+      typedef typename ToTuple<Obs>::value_type value_type;
+      typedef typename value_type::first_type first_type;
+      typedef typename value_type::second_type second_type;
+
+      typedef typename boost::add_const<first_type>::type const_first_type;
+      typedef typename boost::add_reference<const_first_type>::type first_const_ref_type;
+
+      typedef typename boost::add_reference<first_type>::type type_first_ref;
+      typedef typename boost::add_reference<second_type>::type type_second_ref;
+
+    };
+
+
+    template<class T> struct ForceAddConst
+    {
+      typedef typename std::decay<T>::type naked_type;
+      typedef typename boost::add_const<naked_type>::type const_type;
+      typedef typename boost::add_reference<const_type>::type const_ref_type;
+    };
+
+    template<class Key> 
+    typename ToVector<Key>::type at()
+    { 
+      BOOST_MPL_ASSERT((boost::is_same<decltype(bf::at_key<Key>(container)),typename ToVector<Key>::type>));
+      return bf::at_key<Key>(container);
+    }
+    
     template<class Key>
-    auto indices(ttt::Indice<Key> indice)
-    -> decltype(this->pair(indice).first)
-    { return pair(indice).first; }
+    typename ToTuple<Key>::type_ref pair(ttt::Indice<Key> indice)
+    { 
+      BOOST_MPL_ASSERT((boost::is_same<decltype(this->at<Key>().at(indice())),typename ToTuple<Key>::type_ref>));
+      return this->at<Key>().at(indice());
+    }
+
+    template<class Key>
+    typename ToTupleElement<Key>::type_first_ref indices(ttt::Indice<Key> indice)
+    {
+      BOOST_MPL_ASSERT((boost::is_same<decltype(pair(indice).first),typename ToTupleElement<Key>::first_type>));
+      return pair(indice).first;
+    }
     
     template<size_t I, class Key>
-    auto indice(ttt::Indice<Key> indice)
-    -> decltype(bf::at_c<I>(this->pair(indice).first))
-    { return bf::at_c<I>(pair(indice).first); }
-    
-    template<size_t I, class Key>
-    auto sparse_indices(ttt::Indice<Key> indice) 
-    -> decltype(bf::at_c<I>(this->pair(indice).second))
-    { return bf::at_c<I>(pair(indice).second); }
+    typename br::at_c<typename ToTupleElement<Key>::first_type,I>::type indice(ttt::Indice<Key> indice)
+    {
+      BOOST_MPL_ASSERT((boost::is_same<decltype(bf::at_c<I>(pair(indice).first)),typename br::at_c<typename ToTupleElement<Key>::first_type,I>::type>));
+      return bf::at_c<I>(pair(indice).first);
+    }
 
     // const
     template<class Key> 
-    auto at() const
-    -> decltype(bf::at_key<Key>(container))
+    typename ToVector<Key>::const_ref_type
+     xat() const
     { return bf::at_key<Key>(container); }
     
     template<class Key>
-    auto pair(const ttt::Indice<Key>& indice)  const
-    -> decltype(this->at<Key>().at(indice()))
-    { return this->at<Key>().at(indice()); }
-    
-    template<size_t I, class Key>
-    auto indice(const ttt::Indice<Key>& indice)  const
-    -> decltype(bf::at_c<I>(this->pair(indice).first))
-    { return bf::at_c<I>(pair(indice).first); }
+    typename ToTuple<Key>::const_ref_type xpair(const ttt::Indice<Key>& indice)  const
+    { 
+      BOOST_MPL_ASSERT((boost::is_same<typename ToTuple<Key>::const_ref_type,decltype(this->xat<Key>().at(indice()))>));
+      return this->xat<Key>().at(indice());
+    }
     
     template<class Key>
-    auto indices(const ttt::Indice<Key>& indice)  const
-    -> decltype(this->pair(indice).first)
-    { return pair(indice).first; }
+    typename ToTupleElement<Key>::first_const_ref_type 
+    indices(const ttt::Indice<Key>& indice)  const
+    { return xpair(indice).first; }
     
     template<size_t I, class Key>
-    auto sparse_indices(const ttt::Indice<Key>& indice)  const
-    -> decltype(bf::at_c<I>(this->pair(indice).second))
-    { return bf::at_c<I>(pair(indice).second); }
-
+    typename ForceAddConst<typename br::at_c<typename ToTupleElement<Key>::second_type,I>::type>::const_ref_type
+    sparse_indices(const ttt::Indice<Key>& indice)  const
+    { 
+      BOOST_MPL_ASSERT((boost::is_same<typename ForceAddConst<typename br::at_c<typename ToTupleElement<Key>::second_type,I>::type>::const_ref_type,decltype(bf::at_c<I>(xpair(indice).second))>));
+      return bf::at_c<I>(xpair(indice).second);
+    }
     
     static void disp()
     {
@@ -201,7 +238,6 @@ namespace lma
       std::cout << "MapSparseIndices : " << ttt::name<MapSparseIndices>() << std::endl;
       std::cout << "MapSparseParameters : " << ttt::name<MapSparseParameters>() << std::endl;
       
-//       clement(MapSparseIndices());
       std::cout << " =======================\n";
     }
   };
@@ -271,7 +307,7 @@ namespace lma
     
     template<class Obs> void operator()(ttt::wrap<Obs> const &)
     {
-      typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
+      typename Bundle::MapZZ2::template ToTupleElement<Obs>::first_type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
       for(size_t i = 0 ; i < vector.size() ; ++i)
       {
@@ -290,7 +326,7 @@ namespace lma
     
     template<class Obs> void operator()(ttt::wrap<Obs> const &)
     {
-      typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
+      typename Bundle::MapZZ2::template ToTupleElement<Obs>::first_type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
       for(size_t i = 0 ; i < vector.size() ; ++i)
       {
@@ -413,13 +449,7 @@ namespace lma
     template<class Key> typename GetValueType<MCFonction,Key>::type obs(const ttt::Indice<Key>& indice) const { return at_obs<Key>()(indice); }
 
 
-    template<class Map,class Key1, class Key2> struct BinaryAt
-    {
-      typedef typename br::value_at_key<Map,Key2>::type Map2;
-      typedef typename br::at_key<Map2,Key1>::type type_ref;
-      typedef typename boost::add_const<typename std::decay<type_ref>::type>::type const_type;
-      typedef typename boost::add_reference<const_type>::type const_ref_type;
-    };
+
 
     //! operator< Key1, Key2 >() -> SIC< Key1, Key2 >
     template<class Key1, class Key2> typename BinaryAt<VABMap,Key1,Key2>::type_ref indices()

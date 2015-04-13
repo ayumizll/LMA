@@ -61,10 +61,10 @@ namespace lma
       const Type& operator()(const Indice& indice) const { assert(indice<v_.size());return v_[indice()]; }
 
       //! dereference l'objet s'il est de type pointeur
-      auto reference(const Indice& indice) -> decltype(ttt::to_ref(v_[indice()]))
+      typename ToRef<Type>::ref reference(const Indice& indice)
         {assert(indice<v_.size()); return ttt::to_ref(v_[indice()]);}
 
-      auto reference(const Indice& indice) const -> decltype(ttt::to_ref(v_[indice()]))
+      typename ToRef<Type>::const_ref reference(const Indice& indice) const
         {assert(indice<v_.size()); return ttt::to_ref(v_[indice()]);}
 
       Indice add(const Type& a)

@@ -17,8 +17,18 @@
 
 namespace ttt
 {
+  template<class T> struct ToRef
+  {
+    typedef T& ref;
+    typedef const T& const_ref;
+  };
+
+  template<class T> struct ToRef<T*>: ToRef<T> {};
+  
+
   template<class T> inline T& to_ref(T& obj) { return obj;}
   template<class T> inline T& to_ref(T* obj) { return *obj;}
+
 }
 
 #endif

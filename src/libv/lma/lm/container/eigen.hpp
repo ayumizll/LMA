@@ -43,7 +43,7 @@ namespace lma
   {
     typedef flt Float;
     typedef Eigen::Matrix<Float,I,J> Matrix;
-    static auto Zero() -> decltype(Matrix::Zero()) { return Matrix::Zero(); }
+    static EIGEN_STRONG_INLINE const typename Eigen::DenseBase<Matrix>::ConstantReturnType Zero() { return Matrix::Zero(); }
     typedef Eigen::Matrix<Float,Eigen::Dynamic,Eigen::Dynamic> MatrixDD;
     typedef Eigen::Matrix<Float,Eigen::Dynamic,1> MatrixD1;
   };
@@ -130,13 +130,15 @@ namespace lma
   }
   
   template<class Derived>
-  auto squared_norm(const Eigen::MatrixBase<Derived>& m) -> decltype(m.squaredNorm())
+  EIGEN_STRONG_INLINE typename Eigen::NumTraits<typename Eigen::internal::traits<Derived>::Scalar>::Real 
+  squared_norm(const Eigen::MatrixBase<Derived>& m)
   {
     return m.squaredNorm();
   }
   
   template<class Derived>
-  auto norm(const Eigen::MatrixBase<Derived>& m) -> decltype(m.norm())
+  inline typename Eigen::NumTraits<typename Eigen::internal::traits<Derived>::Scalar>::Real 
+  norm(const Eigen::MatrixBase<Derived>& m)
   {
     return m.norm();
   }
@@ -209,13 +211,14 @@ namespace lma
   }
   
   template<class Float, int I, int J>
-  auto transpose(const Eigen::Matrix<Float,I,J>& mat) -> decltype(mat.transpose())
+  const Eigen::Transpose<const Eigen::Matrix<Float,I,J>> transpose(const Eigen::Matrix<Float,I,J>& mat)
   {
     return mat.transpose();
   }
   
-  template<class Float, int I> 
-  auto dot(const Eigen::Matrix<Float,I,1>& a, const Eigen::Matrix<Float,I,1>& b) -> decltype(a.dot(b))
+  template<class Derived, class OtherDerived> 
+  typename Eigen::internal::scalar_product_traits<typename Eigen::internal::traits<Derived>::Scalar,typename Eigen::internal::traits<OtherDerived>::Scalar>::ReturnType
+  dot(const Eigen::MatrixBase<Derived>& a, const Eigen::MatrixBase<OtherDerived>& b)
   {
     return a.dot(b);
   }

@@ -81,28 +81,9 @@ namespace lma
       static const std::size_t NbContainer = boost::fusion::result_of::size<Map>::value;
 
       //! add a value to the associate container when Value == Key
-      template<class Value> auto add(const Value& value)
-        -> decltype(boost::fusion::at_key<Value>(map_).add(value))
+      template<class Value> ttt::Indice<Value> add(const Value& value)
       {
         return boost::fusion::at_key<Value>(map_).add(value);
-      }
-
-      //! add a value to the associate container when Value != Key
-      template<class Key, class Value> auto add_by_key(const Value& value)
-        -> decltype(boost::fusion::at_key<Key>(map_).add(value))
-      {
-        return boost::fusion::at_key<Key>(map_).add(value);
-      }
-
-      //! get is used to solved ambiguity with the operator()
-      template<class Key> auto at_key() -> decltype(boost::fusion::at_key<Key>(map_))
-      {
-        return boost::fusion::at_key<Key>(map_);
-      }
-
-      template<class Key> auto at_key() const -> decltype(boost::fusion::at_key<Key>(map_))
-      {
-        return boost::fusion::at_key<Key>(map_);
       }
 
       template<class Key> struct AtKey
@@ -111,6 +92,17 @@ namespace lma
         typedef typename boost::add_const<typename std::decay<type>::type>::type const_type;
         typedef typename boost::add_reference<const_type>::type const_ref_type;
       };
+
+      template<class Key> typename AtKey<Key>::type at_key()
+      {
+        return boost::fusion::at_key<Key>(map_);
+      }
+
+      template<class Key> typename AtKey<Key>::const_ref_type at_key() const
+      {
+        return boost::fusion::at_key<Key>(map_);
+      }
+
 
       const Map& map() const { return map_; }
       Map& map() { return map_; }
