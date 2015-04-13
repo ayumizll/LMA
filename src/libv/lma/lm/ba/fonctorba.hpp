@@ -89,7 +89,7 @@ namespace lma
     Tie& tie;
     JaTJb(Tie& tie_):tie(tie_){}
     
-    template<size_t I> void operator()()
+    template<size_t I> void operator()(Int<I> const&)
     {
       auto& map_indice = bf::at_c<0>(tie);
       auto& jacob = bf::at_c<1>(tie);
@@ -123,7 +123,7 @@ namespace lma
   {
     Tie& tie;
     JtJ(Tie& tie_):tie(tie_){}
-    template<size_t I> void operator()()
+    template<size_t I> void operator()(Int<I> const &)
     {
       auto& map_indice   = bf::at_c<0>(tie);
       auto& jacob        = bf::at_c<1>(tie);

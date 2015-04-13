@@ -38,7 +38,7 @@ namespace lma
       : bundle(bundle_),ba(ba_),map_erreur(map_erreur_),medianes(medianes_){}
 
 
-      template<class Obs/*, class DerivativeTag*/> void sequential()// DerivativeTag = NumericForward || NumericCentral || Analytical
+      template<class Obs/*, class DerivativeTag*/> void sequential(ttt::wrap<Obs> const &)// DerivativeTag = NumericForward || NumericCentral || Analytical
       {
         auto& v_erreur = map_erreur.template at_key<Obs>();
         for(auto iobs = bundle.template at_obs<Obs>().first() ; iobs < bundle.template at_obs<Obs>().size() ; ++iobs)
@@ -53,15 +53,15 @@ namespace lma
             const auto& map_indice = bundle.spi2.indices(iobs);// vector<Indice,...>
             detail::apply_mestimator(bundle.obs(iobs),jacob,v_erreur[iobs()].first,medianes);
             auto tie = bf::vector_tie(map_indice,jacob,v_erreur[iobs()].first,bundle,iobs,ba.h,ba.jte);
-            constexpr size_t size = mpl::size<typename ttt::rm_all<decltype(map_indice)>::type>::value;
+            static const size_t size = mpl::size<typename ttt::rm_all<decltype(map_indice)>::type>::value;
             ttt::unroll<0,size>(JtJ<size,decltype(tie),typename Ba::MatrixTag>(tie));
           }
         }
       }
 
-      template<class Obs> void operator()(ttt::wrap<Obs>)
+      template<class Obs> void operator()(ttt::wrap<Obs> const & wrap)
       {
-        sequential<Obs/*,typename ToDerivativeTag<Obs>::type*/>();
+        sequential(wrap);
       }
     };
 
@@ -103,7 +103,7 @@ namespace lma
             call_derivative(fun,map,jacob,v_erreur[iobs()].first,DerivativeTag());// map<pair<Key,Jacob>,...>
             const auto& map_indice = bundle.spi2.indices(iobs);// vector<Indice,...>
             auto tie = bf::vector_tie(map_indice,jacob,v_erreur[iobs()].first,bundle,iobs,ba.h,ba.jte);
-            constexpr size_t size = mpl::size<typename ttt::rm_all<decltype(map_indice)>::type>::value;
+            static const size_t size = mpl::size<typename ttt::rm_all<decltype(map_indice)>::type>::value;
             ttt::unroll<0,size>(JtJ<size,decltype(tie),typename Ba::MatrixTag>(tie));
           }
         }

@@ -21,11 +21,11 @@ namespace ttt
 {
   template<size_t D, size_t F, class Func> void unroll(Func);
   
-  template<size_t F, class Func> inline void unroll(Func, Int<F>, Int<F>) {}
+  template<size_t F, class Func> inline void unroll(Func const &, Int<F> const &, Int<F> const &) {}
   
-  template<size_t D, size_t F, class Func> inline void unroll(Func func, Int<D>, Int<F>)
+  template<size_t D, size_t F, class Func> inline void unroll(Func func, Int<D> const &, Int<F> const &)
   {
-    func.template operator() <D> ();
+    func(Int<D>());
     ttt::unroll<D+1,F>(func);
   }
 

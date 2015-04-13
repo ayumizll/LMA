@@ -118,7 +118,7 @@ namespace lma
     std::vector<double>& norms;
     _ADDNORM(Error error_, std::vector<double>& norms_):error(error_),norms(norms_){}
     
-    template<size_t I> void operator()()
+    template<size_t I> void operator()(Int<I> const &)
     {
       norms.push_back(std::abs(std::get<I>(error)));
     }
@@ -159,9 +159,9 @@ namespace lma
       std::vector<double> norms;
       cost_and_save_mad_<Obs,Bundle>(bundle,norms);
       
-      // std::cout << color.bold() << "\n Mad " << ttt::name<Obs>() << " : ";
+      //std::cout << color.bold() << "\n Mad " << ttt::name<Obs>() << " : ";
       bf::at_key<Obs>(meds) = bundle.template at_obs<Obs>()(0).compute(norms);
-      // std::cout << color.reset();
+      //std::cout << color.reset();
     }
   };
 

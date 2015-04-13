@@ -131,7 +131,7 @@ namespace lma
       Bdl& bundle;
       const Tuple& tuple;
       AddSelf(Bdl& bundle_, const Tuple& tuple_):bundle(bundle_),tuple(tuple_){}
-      template<size_t I> void operator()()
+      template<size_t I> void operator()(Int<I> const &)
       {
         auto indice = bf::at_c<I>(tuple);
         typedef typename decltype(indice)::IdType Key;

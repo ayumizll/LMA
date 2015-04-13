@@ -60,7 +60,7 @@ namespace lma
 	       a(K,I) = ( std::get<K>(b) - std::get<K>(c) ) * d;
       }
       
-      template<size_t K> inline void operator()() const
+      template<size_t K> inline void operator()(Int<K> const &) const
       {
 	       compute<K>(bf::at_c<0>(tie),bf::at_c<1>(tie),bf::at_c<2>(tie),bf::at_c<3>(tie));
       }

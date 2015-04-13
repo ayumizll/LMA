@@ -214,7 +214,7 @@ namespace lma
     Tuple& tuple;
     AddSet2(Set& set_,Tuple& tuple_):set(set_),tuple(tuple_){}
     
-    template<int I> void operator()()
+    template<size_t I> void operator()(Int<I> const &)
     {
       // ajoute un parametre à la map correspondante
       //map[KeyParam].add(&param)
@@ -228,7 +228,7 @@ namespace lma
     Parameters& parameters;
     AddSet(Set& set_,Parameters& parameters_):set(set_),parameters(parameters_){}
     
-    template<class Obs> void operator()(ttt::wrap<Obs>)
+    template<class Obs> void operator()(ttt::wrap<Obs> const &)
     {
       auto& vector = bf::at_key<Obs>(parameters);
       typedef typename ttt::rm_all<decltype(vector)>::type V;
@@ -248,7 +248,7 @@ namespace lma
     
     AddParam(Set& set_, Bundle& bundle_):set(set_),bundle(bundle_){}
     
-    template<class Param> void operator()(ttt::wrap<Param>)
+    template<class Param> void operator()(ttt::wrap<Param> const &)
     {
       // ajout des paramètres au bundle et mise à jour de l'indice
       for(auto& elt : bf::at_key<Param>(set))
@@ -269,7 +269,7 @@ namespace lma
     Bundle& bundle;
     UpdateVab(const Set& set_, Bundle& bundle_):set(set_),bundle(bundle_){}
     
-    template<class Obs> void operator()(ttt::wrap<Obs>)
+    template<class Obs> void operator()(ttt::wrap<Obs> const &)
     {
       typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
@@ -288,7 +288,7 @@ namespace lma
     Bundle& bundle;
     UpdateVab2(const Set& set_, Bundle& bundle_):set(set_),bundle(bundle_){}
     
-    template<class Obs> void operator()(ttt::wrap<Obs>)
+    template<class Obs> void operator()(ttt::wrap<Obs> const &)
     {
       typename Bundle::MapZZ2::template ToTuple<Obs>::type tuple;
       auto& vector = bf::at_key<Obs>(bundle.spi2.parameters);
