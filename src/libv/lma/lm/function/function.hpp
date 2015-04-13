@@ -58,16 +58,6 @@ namespace lma
     typedef InterpretResidu<typename FunctorTrait::Residu> IR;
     typedef typename IR::type ErreurType;
 
-    template<class A,class B> struct Sum : mpl::plus<A,mpl::int_<Size<B>::value>> {};
-    typedef mpl::fold<
-		      ParametersType,
-		      mpl::int_<0>,
-		      Sum<mpl::_1,mpl::_2>
-	             > DDL;
-		    
-    constexpr static size_t ddl() { return DDL::type::value; }
-    constexpr static size_t erreur_size() { return Size<ErreurType>::value; }
-    
     const F& functor;
 
     Function(const F& f):functor(f){}
@@ -77,7 +67,23 @@ namespace lma
       return ttt::call(functor,to_array(error,IR()),input);
     }
   };
-  
+
+  template<class F> struct FunctionInfo
+  {
+    typedef typename F::ParametersType ParametersType;
+    typedef typename F::ErreurType ErreurType;
+
+    template<class A,class B> struct Sum : mpl::plus<A,mpl::int_<Size<B>::value>> {};
+    typedef mpl::fold<
+          ParametersType,
+          mpl::int_<0>,
+          Sum<mpl::_1,mpl::_2>
+               > DDL;
+        
+    enum { ddl = DDL::type::value };
+    enum { erreur_size = Size<ErreurType>::value };
+  };
+
   template<class F> Function<F> make_function(const F& f) { return Function<F>(f); }
   
   template<class T> struct DoNothing {typedef T type;};
