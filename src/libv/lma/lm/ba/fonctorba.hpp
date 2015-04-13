@@ -257,15 +257,13 @@ namespace lma
     (
       ttt::wrap<Product<Key1,Key2>>,
       typename boost::disable_if<
-                                  mpl::or_<
-                                            mpl::not_<
-                                                      br::has_key<
-                                                                    typename ttt::rm_all<
-                                                                                          decltype(std::get<0>(tie))
-                                                                                        >::type,
-                                                                    typename Product<Key1,Key2>::type
-                                                                  >
-                                                    >
+                                  mpl::not_<
+                                            br::has_key<
+                                                          typename ttt::rm_all<
+                                                                                typename std::tuple_element<0,Tie>::type
+                                                                              >::type,
+                                                          typename Product<Key1,Key2>::type
+                                                        >
                                           >
                                 >::type* =0// trig sup éparse de S non géré dans S = Ws * WsT
     )
