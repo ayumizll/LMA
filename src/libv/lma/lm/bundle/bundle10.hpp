@@ -388,29 +388,42 @@ namespace lma
 //       abort();
     }
 
+    template<class MContainer, class Key> struct GetValueType
+    {
+      typedef typename MContainer::template AtKey<Key>::type ContainerRef;
+      typedef typename std::decay<ContainerRef>::type Container;
+      typedef typename Container::Type type_;
+      typedef typename boost::add_reference<typename boost::add_const<type_>::type>::type type;
+    };
+
     //! at_key< Key>() -> TIC< Key >
-    template<class Key> auto at_opt()       -> decltype(opt_container.template at_key<Key>()) { return opt_container.template at_key<Key>(); }
-    template<class Key> auto at_opt() const -> decltype(opt_container.template at_key<Key>()) { return opt_container.template at_key<Key>(); }
+    template<class Key> typename MCA::template AtKey<Key>::type& at_opt()       { return opt_container.template at_key<Key>(); }
+    template<class Key> typename MCA::template AtKey<Key>::const_ref_type& at_opt() const { return opt_container.template at_key<Key>(); }
+    template<class Key> typename MCFonction::template AtKey<Key>::type& at_obs() { return fonction_container.template at_key<Key>(); }
+    template<class Key> typename MCFonction::template AtKey<Key>::const_ref_type at_obs() const {return fonction_container.template at_key<Key>(); }
+    template<class Key> typename GetValueType<MCA,Key>::type opt(const ttt::Indice<Key>& indice) const { return at_opt<Key>()(indice); }
+    template<class Key> typename GetValueType<MCFonction,Key>::type obs(const ttt::Indice<Key>& indice) const { return at_obs<Key>()(indice); }
 
-    template<class Key> auto at_obs()       -> decltype(fonction_container.template at_key<Key>()) { return fonction_container.template at_key<Key>(); }
-    template<class Key> auto at_obs() const -> decltype(fonction_container.template at_key<Key>()) { return fonction_container.template at_key<Key>(); }
 
-    template<class Key> auto operator()(const ttt::Indice<Key>& indice) -> decltype ( this->at_opt<Key>()(indice) )
-    { return at_opt<Key>()(indice); }
-
-    template<class Key> auto operator()(const ttt::Indice<Key>& indice) const -> decltype ( this->at_opt<Key>()(indice) )
-    { return at_opt<Key>()(indice); }
-    template<class Key> auto opt(const ttt::Indice<Key>& indice) const -> decltype ( this->at_opt<Key>()(indice) )
-    { return at_opt<Key>()(indice); }
-    template<class Key> auto obs(const ttt::Indice<Key>& indice) const -> decltype ( this->at_obs<Key>()(indice) )
-    { return at_obs<Key>()(indice); }
+    template<class Map,class Key1, class Key2> struct BinaryAt
+    {
+      typedef typename br::value_at_key<Map,Key2>::type Map2;
+      typedef typename br::at_key<Map2,Key1>::type type_ref;
+      typedef typename boost::add_const<typename std::decay<type_ref>::type>::type const_type;
+      typedef typename boost::add_reference<const_type>::type const_ref_type;
+    };
 
     //! operator< Key1, Key2 >() -> SIC< Key1, Key2 >
-    template<class Key1, class Key2> auto indices() -> decltype(bf::at_key<Key1>(bf::at_key<Key2>(vab_map)))
-    { return bf::at_key<Key1>(bf::at_key<Key2>(vab_map)); }
-    template<class Key1, class Key2> auto indices() const -> decltype(bf::at_key<Key1>(bf::at_key<Key2>(vab_map)))
-    { return bf::at_key<Key1>(bf::at_key<Key2>(vab_map)); }
+    template<class Key1, class Key2> typename BinaryAt<VABMap,Key1,Key2>::type_ref indices()
+    { 
+      BOOST_MPL_ASSERT((boost::is_reference<typename BinaryAt<VABMap,Key1,Key2>::type_ref>));
+      return bf::at_key<Key1>(bf::at_key<Key2>(vab_map));
+    }
 
+    template<class Key1, class Key2> typename BinaryAt<VABMap,Key1,Key2>::const_ref_type indices() const
+    { 
+      return bf::at_key<Key1>(bf::at_key<Key2>(vab_map));
+    }
 
     //! Map of parameters from an observation indice
     template<class Obs> typename br::value_at_key<MapMapParametre,Obs>::type map(const ttt::Indice<Obs>& indice) const

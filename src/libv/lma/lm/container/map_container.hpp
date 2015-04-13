@@ -105,6 +105,13 @@ namespace lma
         return boost::fusion::at_key<Key>(map_);
       }
 
+      template<class Key> struct AtKey
+      {
+        typedef typename br::at_key<Map,Key>::type type;
+        typedef typename boost::add_const<typename std::decay<type>::type>::type const_type;
+        typedef typename boost::add_reference<const_type>::type const_ref_type;
+      };
+
       const Map& map() const { return map_; }
       Map& map() { return map_; }
       
