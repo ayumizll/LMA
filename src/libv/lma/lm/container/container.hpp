@@ -26,6 +26,7 @@
 namespace lma
 {
   inline bool is_invalid(double d) { return !std::isfinite(d);}
+  inline bool is_valid(double d) { return !is_invalid(d); }
 
   template<class> struct Rows;
   template<class> struct Cols;

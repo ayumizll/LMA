@@ -73,9 +73,9 @@ namespace lma {
         for(auto& x : v)
           for(size_t k = 0 ; k < I ; ++k)
           {
-            if (!lma::is_invalid(x[k])) 
+            if (lma::is_invalid(x[k])) 
             {
-              std::cout << x << std::endl;
+              std::cout << " invalid value : " << x[k] << std::endl;
               return true;
             }
           }
@@ -195,8 +195,8 @@ namespace lma {
       std::vector<int> voffset;
       IndiceContainer indice;
       
-      constexpr std::size_t H() { return I; }
-      constexpr std::size_t W() { return J; }
+      static std::size_t H() { return I; }
+      static std::size_t W() { return J; }
       static std::string name() { return color.cyan() + "Table<" + color.reset() + ttt::name<Id1>() + "," + ttt::name<Id2>() + " : " + ttt::name<Matrix>() + color.cyan() + ">" + color.reset(); }
 
       Table() {}
@@ -262,7 +262,11 @@ namespace lma {
       {
         for(auto& x : v)
           for(size_t k = 0 ; k < I ; ++k)
-            if (is_invalid(x(k))) return true;
+            if (is_invalid(x(k)))
+            {
+              std::cout << " Invalid value " << x(k) << std::endl;
+              return true;
+            }
         return false;
       }
 
