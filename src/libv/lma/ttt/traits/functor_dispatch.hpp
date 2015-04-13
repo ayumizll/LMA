@@ -34,7 +34,7 @@ namespace ttt
     template<size_t I, class F, class Residu, class T, class ... A>
     inline bool apply_dispatch(Int<I> const&, const F& f, Residu& residu, const T& t, const A& ... a)
     {
-      return apply_dispatch(Int<I-1>(), f, residu, t, boost::cref(*bf::at_c<I-1>(t).second), a...);
+      return apply_dispatch(Int<I-1>(), f, residu, t, ttt::to_ref(bf::at_c<I-1>(t)), a...);
     }
   }
 

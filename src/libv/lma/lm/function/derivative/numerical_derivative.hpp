@@ -68,9 +68,6 @@ namespace lma
 
     template<class Float, std::size_t K, size_t I, std::size_t Fin> struct TupleDerivatorInternal
     {
-      static constexpr Float h = Float(2.0)*std::sqrt( std::numeric_limits<Float>::epsilon() );
-      static constexpr Float _h = Float(1.0) / h ;
-      
       // forward derivative
       template<class Fonction, class Result, class Tuple, class R> static void compute(const Fonction& fonction, Result& result, Tuple& tuple, const R& r1)
       {
@@ -80,11 +77,11 @@ namespace lma
         //! -> to_ref renvoie T& que l'objet contenu soit T ou T*
         //! at -> renvoie at_c<I>(tuple) ou at_c<I>(map).second
 
-        auto& ref_objet = ttt::to_ref(bf::at_c<K>(tuple).second);
+        auto& ref_objet = ttt::to_ref(bf::at_c<K>(tuple));
         auto& jacob = bf::at_c<K>(result).second;
 
         BOOST_MPL_ASSERT((boost::is_reference<decltype(ref_objet)>));
-        assert( (&ref_objet == &ttt::to_ref(bf::at_c<K>(tuple).second)) );
+        assert( (&ref_objet == &ttt::to_ref(bf::at_c<K>(tuple))) );
 
         auto backup = back_up<I>(ref_objet);
         detail::internal_apply_small_increment(ref_objet,h,v::numeric_tag<I>());
@@ -108,16 +105,16 @@ namespace lma
       template<class Fonction, class Result, class Tuple> static void compute(const Fonction& fonction, Result& result, Tuple& tuple)
       {
         static constexpr Float h = std::sqrt( std::numeric_limits<Float>::epsilon() );
-        static constexpr Float _h = Float(1.0) / (2.0 * h) ;
+        static constexpr Float _h = Float(1.0) / h ;
         //! to_ref : on crée une référence vers l'objet contenu dans le tuple (uniquement pour simplifier l'écriture)
         //! -> to_ref renvoie T& que l'objet contenu soit T ou T*
         //! at -> renvoie at_c<I>(tuple) ou at_c<I>(map).second
 
-        auto& ref_objet = ttt::to_ref(bf::at_c<K>(tuple).second);
+        auto& ref_objet = ttt::to_ref(bf::at_c<K>(tuple));
         auto& jacob = bf::at_c<K>(result).second;
 
         BOOST_MPL_ASSERT((boost::is_reference<decltype(ref_objet)>));
-        assert( (&ref_objet == &ttt::to_ref(bf::at_c<K>(tuple).second)) );
+        assert( (&ref_objet == &ttt::to_ref(bf::at_c<K>(tuple))) );
 
         typedef typename Fonction::ErreurType Residu;
         Residu r2;
@@ -151,7 +148,7 @@ namespace lma
       // numerical central derivative
       template<class Fonction, class Result, class Tuple> static void compute(const Fonction& fonction, Result& result, Tuple& tuple)
       {
-        static const size_t F = Size<decltype(ttt::to_ref(bf::at_c<I>(tuple).second))>::value;
+        static const size_t F = Size<decltype(ttt::to_ref(bf::at_c<I>(tuple)))>::value;
         TupleDerivatorInternal<Float,I,0,F>::template compute(fonction,result,tuple);
         TupleDerivator<Float,I+1,Fin>::template compute(fonction,result,tuple);
       }
@@ -159,7 +156,7 @@ namespace lma
       // numerical foward derivative
       template<class Fonction, class Result, class Tuple, class R1> static void compute(const Fonction& fonction, Result& result, Tuple& tuple, const R1& r1)
       {
-        static const size_t F = Size<decltype(ttt::to_ref(bf::at_c<I>(tuple).second))>::value;
+        static const size_t F = Size<decltype(ttt::to_ref(bf::at_c<I>(tuple)))>::value;
         TupleDerivatorInternal<Float,I,0,F>::template compute(fonction,result,tuple,r1);
         TupleDerivator<Float,I+1,Fin>::template compute(fonction,result,tuple,r1);
       }

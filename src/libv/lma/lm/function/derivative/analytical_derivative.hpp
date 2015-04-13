@@ -32,7 +32,7 @@ namespace lma
     
     template<class Fun, size_t I, size_t F, class Tuple, class ... R> static void _unroll2(const Fun& fun, ttt::Int<I> const&, ttt::Int<F> const&, const Tuple& tuple, R& ... r)
     {
-      _unroll2(fun,ttt::Int<I+1>(),ttt::Int<F>(),tuple,ttt::to_ref(bf::at_c<F-1-I>(tuple).second),r...);
+      _unroll2(fun,ttt::Int<I+1>(),ttt::Int<F>(),tuple,ttt::to_ref(bf::at_c<F-1-I>(tuple)),r...);
     }
     
     template<class Fun, size_t F, class Tuple, class ... R> static void _unroll2(const Fun& fun, ttt::Int<F> const&, ttt::Int<F> const&, const Tuple&, R& ... r)

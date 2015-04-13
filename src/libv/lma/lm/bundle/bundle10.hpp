@@ -396,6 +396,14 @@ namespace lma
       typedef typename boost::add_reference<typename boost::add_const<type_>::type>::type type;
     };
 
+    template<class MContainer, class Key> struct GetValueType2
+    {
+      typedef typename br::at_key<MContainer,Key>::type ContainerRef;
+      typedef typename std::decay<ContainerRef>::type Vector;
+      typedef typename Vector::value_type type_;
+      typedef typename boost::add_reference<typename boost::add_const<type_>::type>::type type;
+    };
+
     //! at_key< Key>() -> TIC< Key >
     template<class Key> typename MCA::template AtKey<Key>::type& at_opt()       { return opt_container.template at_key<Key>(); }
     template<class Key> typename MCA::template AtKey<Key>::const_ref_type& at_opt() const { return opt_container.template at_key<Key>(); }
@@ -426,7 +434,9 @@ namespace lma
     }
 
     //! Map of parameters from an observation indice
-    template<class Obs> typename br::value_at_key<MapMapParametre,Obs>::type map(const ttt::Indice<Obs>& indice) const
+    //template<class Obs> typename br::value_at_key<MapMapParametre,Obs>::type map(const ttt::Indice<Obs>& indice) const
+
+    template<class Obs> typename GetValueType2<typename MapZZ2::ContainerParameters,Obs>::type map(const ttt::Indice<Obs>& indice) const
     {
       assert(size_t(indice()) < bf::at_key<Obs>(spi2.parameters).size());
       return bf::at_key<Obs>(spi2.parameters)[indice()];
