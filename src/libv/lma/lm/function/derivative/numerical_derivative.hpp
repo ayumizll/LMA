@@ -71,7 +71,7 @@ namespace lma
       // forward derivative
       template<class Fonction, class Result, class Tuple, class R> static void compute(const Fonction& fonction, Result& result, Tuple& tuple, const R& r1)
       {
-        static const Float h = std::sqrt( std::numeric_limits<Float>::epsilon() );
+        static const Float h = Float(2.0)*std::sqrt( std::numeric_limits<Float>::epsilon() );
         static const Float _h = Float(1.0) / h ;
         //! to_ref : on crée une référence vers l'objet contenu dans le tuple (uniquement pour simplifier l'écriture)
         //! -> to_ref renvoie T& que l'objet contenu soit T ou T*
@@ -104,7 +104,7 @@ namespace lma
       // central derivative
       template<class Fonction, class Result, class Tuple> static void compute(const Fonction& fonction, Result& result, Tuple& tuple)
       {
-        static const Float h = std::sqrt( std::numeric_limits<Float>::epsilon() );
+        static const Float h = Float(2.0)*std::sqrt( std::numeric_limits<Float>::epsilon() );
         static const Float _h = Float(1.0) / h ;
         //! to_ref : on crée une référence vers l'objet contenu dans le tuple (uniquement pour simplifier l'écriture)
         //! -> to_ref renvoie T& que l'objet contenu soit T ou T*

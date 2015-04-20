@@ -53,7 +53,7 @@ namespace lma
   };
 
   
-  template<class Float, int Rows, int Cols> struct Cols<TooN::Matrix<Rows,Cols,Float>>>
+  template<class Float, int Rows, int Cols> struct Cols<TooN::Matrix<Rows,Cols,Float>>
   {
     enum { value = Cols };
   };

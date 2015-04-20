@@ -24,29 +24,27 @@
 
 namespace lma
 {
-  template<class T, class = void> struct Size;
+  template<class T, class = void> struct Size { enum {value = -1}; };
 
-  template<class T, size_t N> struct Size< T[N] > { static const size_t value = N;};
+  template<class T, size_t N> struct Size< T[N] > { enum { value = N }; };
   
-  template<class T> struct Size<T&>       { static const std::size_t value = Size<T>::value; };
-  template<class T> struct Size<const T>  { static const std::size_t value = Size<T>::value; };
-  template<class T> struct Size<T*>       { static const std::size_t value = Size<T>::value; };
-  template<class T> struct Size<const T*> { static const std::size_t value = Size<T>::value; };
-  template<class T> struct Size<const T&> { static const std::size_t value = Size<T>::value; };
-
+  template<class T> struct Size<T&> : Size<T> {};
+  template<class T> struct Size<const T> : Size<T> {};
+  template<class T> struct Size<T*> : Size<T> {};
+  template<class T> struct Size<const T*> : Size<T> {};
+  template<class T> struct Size<const T&> : Size<T> {};
 
   template<class T, size_t N> struct Size< std::array<T,N> > { enum { value = N } ; };
 
-  template<class T> struct Size< std::pair<T,bool> > { static const std::size_t value = Size<T>::value; };
+  template<class T> struct Size< std::pair<T,bool> > : Size<T> {};
 
-  template<> struct Size< float >         { static const std::size_t value = 1; };
-  template<> struct Size< int >           { static const std::size_t value = 1; };
-  template<> struct Size< double >        { static const std::size_t value = 1; };
-  template<int I> struct Size<v::numeric_tag<I>> { static const std::size_t value = I; };
+  template<> struct Size< float >          { enum { value = 1 }; };
+  template<> struct Size< int >            { enum { value = 1 }; };
+  template<> struct Size< double >         { enum { value = 1 }; };
+  template<int I> struct Size<v::numeric_tag<I>>  { enum { value = I }; };
   
-
   template<class X, class R = void> struct SizeIsDefined : boost::mpl::false_ {};
-  template<class X> struct SizeIsDefined< X, typename std::enable_if<sizeof(Size<X>)>::type > : boost::mpl::true_ {};
+  template<class X> struct SizeIsDefined< X, typename std::enable_if<Size<X>::value!=-1>::type > : boost::mpl::true_ {};
 }
 
 #endif
