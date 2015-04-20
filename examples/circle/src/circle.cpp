@@ -6,6 +6,9 @@
 //                     http://www.boost.org/LICENSE_1_0.txt
 //==============================================================================
 
+#ifdef WIN32
+#include <random>
+#endif
 
 #include <libv/lma/lma.hpp>
 

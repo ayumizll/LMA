@@ -17,7 +17,7 @@
 #include <libv/lma/lma.hpp>
 #include <libv/geometry/rotation.hpp>
 
-#include <unsupported/Eigen/MatrixFunctions>
+//#include <unsupported/Eigen/MatrixFunctions>
 
 struct Camera
 {
@@ -156,7 +156,7 @@ struct Reprojection
 
   Reprojection(const Eigen::Vector2d& p2d):obs(p2d){}
 
-  bool operator()(const Camera& camera, const Eigen::Vector3d& point, double (&error)[2]) const
+  bool operator()(const Camera& camera, const Eigen::Vector3d& point, Eigen::Vector2d& error) const
   {
     const Eigen::Vector3d p = camera.rotation * point + camera.translation;
     const double xp = - p[0] / p[2],

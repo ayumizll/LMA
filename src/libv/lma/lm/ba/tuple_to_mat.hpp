@@ -35,7 +35,7 @@ namespace lma {
     const Tuple& tuple;
     const Dim& dim;
     
-    template<int I, int J, class T> 
+	template<class T, int I, int J>
     void set_(Mat& m, int x, int y, const Eigen::Matrix<T,I,J>& block)
     {
       for(int i = 0 ; i < I ; ++i)

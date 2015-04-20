@@ -351,7 +351,7 @@ namespace lma {
       Float lambda = 0;
       for(auto i = first() ; i < size() ; ++i)
         for(size_t k = 0 ; k < I; ++k)
-          lambda = std::max(std::abs(at(this->operator()(i,0),k,k)),lambda);
+          lambda = std::max(std::abs(at((*this)(i,0),k,k)),lambda);
       return lambda;
     }
     
@@ -360,7 +360,7 @@ namespace lma {
       for(auto i = first() ; i < size() ; ++i)
 //         damp_diag(this->operator()(i,0),lambda);
 	for(size_t k = 0 ; k < I ; ++k)
-	  at(this->operator()(i,0),k,k) +=lambda;
+	  at((*this)(i,0),k,k) +=lambda;
     }
     
     void set_diag_inv(const Table<Id1,Id1,Tag,Symetric>& table)
@@ -398,7 +398,7 @@ namespace lma {
     }
   };
   
-  template<class P, class T> struct Table<P,P,T,Diagonal> : public Vector<P,T,false>
+  template<class P, class Q, class T> struct Table<P,Q,T,Diagonal> : public Vector<P,T,false>
   {
     typedef P Id1;
     typedef P Id2;

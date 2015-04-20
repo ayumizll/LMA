@@ -74,8 +74,8 @@ namespace lma
   
   template<class T, int I, int J> struct Size< Eigen::Matrix<T,I,J> > { static const std::size_t value = I; };
   
-  template<class Float, int N> inline Float& at(Eigen::Matrix<Float,N,N>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
-  template<class Float, int N> inline const Float& at(const Eigen::Matrix<Float,N,N>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
+  template<class Float, int N, int M> inline Float& at(Eigen::Matrix<Float,N,M>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
+  template<class Float, int N, int M> inline const Float& at(const Eigen::Matrix<Float,N,M>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
   
   template<class Float, size_t N> Eigen::Map<const Eigen::Matrix<Float,int(N),1>> make_view(const std::array<Float,N>& residual, ttt::wrap<boost::fusion::pair<Eig,Float>>)
   {
@@ -212,7 +212,7 @@ namespace lma
     return mat.inverse();
   }
   
-  template<class Float, int I> void inverse_in_place(Eigen::Matrix<Float,I,I>& mat)
+  template<class Float, int I, int J> void inverse_in_place(Eigen::Matrix<Float,I,J>& mat)
   {
     mat = mat.inverse().eval();
 //     mat = mat.template selfadjointView<Eigen::Upper>().llt().solve(Eigen::Matrix<Float,I,I>::Identity());
@@ -240,7 +240,7 @@ namespace lma
   void ldlt_solve(Eigen::Matrix<Float,Eigen::Dynamic,1>& x, const Eigen::Matrix<Float,Eigen::Dynamic,Eigen::Dynamic>& a, const Eigen::Matrix<Float,Eigen::Dynamic,1>&  b)
   {
     assert(a.cols()!=0 && a.rows()!=0 && b.size()!=0);
-    x = a.template selfadjointView<Eigen::Upper>().llt().solve(b);
+    x = a.template selfadjointView<Eigen::Upper>().ldlt().solve(b);
   }
   
 }
