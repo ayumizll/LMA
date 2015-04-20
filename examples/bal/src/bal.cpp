@@ -15,6 +15,7 @@
 
 //#define USE_TOON
 #include <libv/lma/lma.hpp>
+#include <libv/geometry/rotation.hpp>
 
 #include <unsupported/Eigen/MatrixFunctions>
 
@@ -30,7 +31,11 @@ struct Camera
     // update rotation using exponential map
     Eigen::Matrix3d r;
     r << 0,-delta[2], delta[1],delta[2],0,-delta[0],-delta[1],delta[0],0;
-    rotation *= r.exp();
+
+	rotation *= v::rotation_exp(r);
+    
+	//rotation *= r.exp();
+
     // update translation
     translation.x() += delta[3];
     translation.y() += delta[4];
@@ -111,24 +116,29 @@ void apply_small_rotation(Eigen::Matrix3d &m, double x, double y, double z)
 
 namespace lma
 {
-  // Update policy of a Camera
-  void apply_increment(Camera& camera, const double delta[9], const Adl&)
-  {
-    camera.apply_rotation(delta);
-  }
-  
-  // Only for numerical derivative:
-  // Update policy of a Camera according to the Ie parameter (h ~ 1e-8).
-  template<int I> void apply_small_increment(Camera& camera, double h, v::numeric_tag<I>, const Adl&)
-  {
-    if (I<3) apply_small_rotation(camera.rotation,I==0?h:0,I==1?h:0,I==2?h:0);
-      else if (I==3) camera.translation.x() += h;
-    else if (I==4) camera.translation.y() += h;
-    else if (I==5) camera.translation.z() += h;
-    else if (I==6) camera.a += h;
-    else if (I==7) camera.b += h;
-    else if (I==8) camera.c += h;
-  }
+	//namespace detail {
+
+
+		// Update policy of a Camera
+		void apply_increment(Camera& camera, const double delta[9], const Adl&)
+		{
+			camera.apply_rotation(delta);
+		}
+
+		// Only for numerical derivative:
+		// Update policy of a Camera according to the Ie parameter (h ~ 1e-8).
+		template<int I> void apply_small_increment(Camera& camera, double h, v::numeric_tag<I>, const Adl&)
+		{
+			if (I < 3) apply_small_rotation(camera.rotation, I == 0 ? h : 0, I == 1 ? h : 0, I == 2 ? h : 0);
+			else if (I == 3) camera.translation.x() += h;
+			else if (I == 4) camera.translation.y() += h;
+			else if (I == 5) camera.translation.z() += h;
+			else if (I == 6) camera.a += h;
+			else if (I == 7) camera.b += h;
+			else if (I == 8) camera.c += h;
+		}
+	//}
+
   
   //degree of freedom of a Camera
   template<> struct Size<Camera> { enum {value = 9}; };
@@ -203,3 +213,4 @@ int main(int argc, char** argv)
 
   return 0;
 }
+

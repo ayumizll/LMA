@@ -180,22 +180,30 @@ namespace lma
 
 
 ////////////////////////////////////////////////////////
-  template<class T, int I> void apply_increment(Eigen::Matrix<T,I,1>& obj, const T delta[I], const Adl&)
-  {
-    for(int i = 0 ; i < I ; i ++)
-      obj[i] += delta[i];
-  }
-  
-  template<class T> void apply_increment(Eigen::Matrix<T,1,1>& obj, const T& delta, const Adl&)
-  {
-    obj[0] += delta;
-  }
-  
-  template<int K, int I, class T> void apply_small_increment(Eigen::Matrix<T,K,1>& obj, T h, v::numeric_tag<I>, const Adl&)
-  {
-    static_assert( I < K, " apply_small_increment : I < K ");
-    obj[I] += h;
-  }
+
+  //namespace detail {
+
+	  //template<class T, int I> void apply_increment(Eigen::Matrix<T, I, 1>& obj, const T delta[I], const Adl&)
+	  template<class T, int I> void apply_increment(Eigen::Matrix<T, I, 1>& obj, const T *delta, const Adl&)
+
+	  {
+		  for (int i = 0; i < I; i++)
+			  obj[i] += delta[i];
+	  }
+
+	  template<class T> void apply_increment(Eigen::Matrix<T, 1, 1>& obj, const T& delta, const Adl&)
+	  {
+		  obj[0] += delta;
+	  }
+
+	  //template<int K, int I, class T> void apply_small_increment(Eigen::Matrix<T, K, 1>& obj, T h, v::numeric_tag<I>, const Adl&)
+	  template<class T, int K, int I> void apply_small_increment(Eigen::Matrix<T, K, 1>& obj, T h, v::numeric_tag<I>, const Adl&)
+	  {
+		  static_assert(I < K, " apply_small_increment : I < K ");
+		  obj[I] += h;
+	  }
+
+  //}
 ////////////////////////////////////////////////////////
 
 
