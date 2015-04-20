@@ -400,6 +400,7 @@ namespace lma {
   
   template<class P, class Q, class T> struct Table<P,Q,T,Diagonal> : public Vector<P,T,false>
   {
+    static_assert(boost::is_same<P,Q>::value,"Table<P,Q>: P!=Q");
     typedef P Id1;
     typedef P Id2;
     typedef Vector<P,T,false> parent;

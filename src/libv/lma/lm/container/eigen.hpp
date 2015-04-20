@@ -74,8 +74,11 @@ namespace lma
   
   template<class T, int I, int J> struct Size< Eigen::Matrix<T,I,J> > { static const std::size_t value = I; };
   
-  template<class Float, int N, int M> inline Float& at(Eigen::Matrix<Float,N,M>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
-  template<class Float, int N, int M> inline const Float& at(const Eigen::Matrix<Float,N,M>& m, int i, int j) { assert(i<N && j<N);return m(i,j); }
+  template<class Float, int N, int M> inline Float& at(Eigen::Matrix<Float,N,M>& m, int i, int j)
+    { static_assert(N==M,"at(Eigen::Matrix<F,N,M>): N!=M");assert(i<N && j<N);return m(i,j); }
+
+  template<class Float, int N, int M> inline const Float& at(const Eigen::Matrix<Float,N,M>& m, int i, int j)
+    { static_assert(N==M,"at(Eigen::Matrix<F,N,M>): N!=M");assert(i<N && j<N);return m(i,j); }
   
   template<class Float, size_t N> Eigen::Map<const Eigen::Matrix<Float,int(N),1>> make_view(const std::array<Float,N>& residual, ttt::wrap<boost::fusion::pair<Eig,Float>>)
   {
@@ -181,29 +184,23 @@ namespace lma
 
 ////////////////////////////////////////////////////////
 
-  //namespace detail {
+  template<class T, int I> void apply_increment(Eigen::Matrix<T, I, 1>& obj, const T *delta, const Adl&)
+  {
+	  for (int i = 0; i < I; i++)
+		  obj[i] += delta[i];
+  }
 
-	  //template<class T, int I> void apply_increment(Eigen::Matrix<T, I, 1>& obj, const T delta[I], const Adl&)
-	  template<class T, int I> void apply_increment(Eigen::Matrix<T, I, 1>& obj, const T *delta, const Adl&)
+  template<class T> void apply_increment(Eigen::Matrix<T, 1, 1>& obj, const T& delta, const Adl&)
+  {
+	  obj[0] += delta;
+  }
 
-	  {
-		  for (int i = 0; i < I; i++)
-			  obj[i] += delta[i];
-	  }
+  template<class T, int K, int I> void apply_small_increment(Eigen::Matrix<T, K, 1>& obj, T h, v::numeric_tag<I>, const Adl&)
+  {
+	  static_assert(I < K, " apply_small_increment : I < K ");
+	  obj[I] += h;
+  }
 
-	  template<class T> void apply_increment(Eigen::Matrix<T, 1, 1>& obj, const T& delta, const Adl&)
-	  {
-		  obj[0] += delta;
-	  }
-
-	  //template<int K, int I, class T> void apply_small_increment(Eigen::Matrix<T, K, 1>& obj, T h, v::numeric_tag<I>, const Adl&)
-	  template<class T, int K, int I> void apply_small_increment(Eigen::Matrix<T, K, 1>& obj, T h, v::numeric_tag<I>, const Adl&)
-	  {
-		  static_assert(I < K, " apply_small_increment : I < K ");
-		  obj[I] += h;
-	  }
-
-  //}
 ////////////////////////////////////////////////////////
 
 
@@ -214,8 +211,8 @@ namespace lma
   
   template<class Float, int I, int J> void inverse_in_place(Eigen::Matrix<Float,I,J>& mat)
   {
+    static_assert(I==J,"inverse_in_place(Matrix<F,I,J>: I!=J");
     mat = mat.inverse().eval();
-//     mat = mat.template selfadjointView<Eigen::Upper>().llt().solve(Eigen::Matrix<Float,I,I>::Identity());
   }
   
   template<class Float, int I, int J>
@@ -242,7 +239,6 @@ namespace lma
     assert(a.cols()!=0 && a.rows()!=0 && b.size()!=0);
     x = a.template selfadjointView<Eigen::Upper>().ldlt().solve(b);
   }
-  
 }
 
 namespace ttt
