@@ -99,10 +99,13 @@ namespace lma {
       TVector v;   
 
     public:
-      auto begin() -> decltype( this->v.begin() ) { return v.begin(); }
-      auto end() -> decltype( this->v.end() ) { return v.end(); }
-      auto begin() const -> decltype( this->v.begin() ) { return v.cbegin(); }
-      auto end() const -> decltype( this->v.end() ) { return v.cend(); }
+
+      typedef typename TVector::iterator iterator;
+      typedef typename TVector::const_iterator citerator;
+      iterator begin() { return v.begin(); }
+      iterator end() { return v.end(); }
+      citerator begin() const { return v.cbegin(); }
+      citerator end() const { return v.cend(); }
   };
 
 
@@ -272,10 +275,12 @@ namespace lma {
 
       void set_zero() { for(auto& x : v) x = MatrixMaker::Zero();}
 
-      auto begin() -> decltype( this->v.begin() ) { return v.begin(); }
-      auto end() -> decltype( this->v.end() ) { return v.end(); }
-      auto begin() const -> decltype( this->v.begin() ) { return v.cbegin(); }
-      auto end() const -> decltype( this->v.end() ) { return v.cend(); }
+      typedef typename TVector::iterator iterator;
+      typedef typename TVector::const_iterator citerator;
+      iterator begin() { return v.begin(); }
+      iterator end() { return v.end(); }
+      citerator begin() const { return v.cbegin(); }
+      citerator end() const { return v.cend(); }
   };
 
   
