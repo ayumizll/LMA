@@ -1,3 +1,4 @@
+
 /**
 
 \file
@@ -57,6 +58,8 @@ namespace ttt
   {
     static std::string name() { return std::string("Int<") + lma::to_string(I) + ">";}
   };
+
+  template<> struct Name<mpl_::na> { static std::string name(){return "mpl::na";}};
 }
 
 #endif

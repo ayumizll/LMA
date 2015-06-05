@@ -48,6 +48,7 @@ namespace lma
       v=2.;
     }
 
+    static std::string name() { return std::string("Solver<") + ttt::name<mpl::vector<Functors...>>() + ">"; }
     
     template<class F, class ... Params> Solver& add(const F& f, const Params& ... params)
     {
