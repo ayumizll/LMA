@@ -10,10 +10,8 @@ cmake_minimum_required(VERSION 2.6)
 project(derivatives)
 
 find_package(libv REQUIRED core lma)
-find_package(Boost 1.51.0 REQUIRED chrono system)
+find_package(Boost REQUIRED chrono system)
 
 include(libv_configure_executable)
 
-target_link_libraries(${PROJECT_NAME}
-  ${Boost_LIBRARIES}
-  )
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})

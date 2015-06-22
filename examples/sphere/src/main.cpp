@@ -63,7 +63,7 @@
       str = "  Optimise Sphere + Points 3D";
     else if(state == after2)
      str ="  Optimise Sphere + Points 3D + Contrainte";
-    v::viewer(0).size(1900,900).layer(0).clear().pen_color(v::red).font_size(30).font_style(v::Bold).add_text(40,50,str).update();
+    v::viewer(0).layer(0).clear().pen_color(v::red).font_size(30).font_style(v::Bold).add_text(40,50,str).update();
   };
 
   void draw(Vector4d& sphere, vector<Vector3d>& points, State& state)
@@ -89,6 +89,7 @@
 
   auto optimise = [](Vector4d& sphere, vector<Vector3d>& points, const vector<Vector3d>& refs, int mode)
   {
+    
     struct DistanceToSphere1
     {
       const Vector3d& point;
@@ -145,6 +146,7 @@
 
 int main()
 {
+  v::viewer(0).size(800,660);
   Vector4d sphere;
   sphere << 0,0,0,100;
 

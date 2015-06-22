@@ -15,8 +15,5 @@ find_package(OpenGL REQUIRED)
 
 include(libv_configure_executable)
 
-target_link_libraries(${PROJECT_NAME}
-  ${Boost_LIBRARIES}
-  ${OPENGL_LIBRARIES}
-  )
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${OPENGL_LIBRARIES})
 
