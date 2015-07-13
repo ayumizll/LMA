@@ -102,7 +102,7 @@ namespace lma
       double nb_obs = 0;
       std::tie(rms2,nb_obs) = algo.compute_erreur(bundle);
 
-      double rho = (rms1-rms2)*2.0 / (algo.compute_scale(lambda) + 1e-3);
+      double rho = (rms1-rms2) / (algo.compute_scale(lambda) + 1e-3);
 
       if(rms2 > rms1)
       {
@@ -111,11 +111,11 @@ namespace lma
         is_better = false;
         callbacks.at_end_bundle_adjustment_iteration(*this);
         lambda*=v;
-        v*=2;
+        v *= 2;
       }
       else
       {
-        double alpha = 1. - v::pow<3>(2*rho-1);
+        double alpha = 1. - v::pow<3>(2.*rho-1.);
         double scaleFactor = (std::max)(_goodStepLowerScale, (std::min)(alpha, _goodStepUpperScale));
         lambda *= scaleFactor;
         v = 2;
