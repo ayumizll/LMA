@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(libv-lma)
 
-set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 find_package(libv REQUIRED core)
 find_package(Boost 1.51 REQUIRED chrono system)
