@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(bal)
 
-find_package(libv REQUIRED core lma geometry)
+find_package(libv REQUIRED core lma)
 find_package(Boost COMPONENTS chrono system thread filesystem date_time)
 
 include(libv_configure_executable)

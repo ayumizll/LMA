@@ -13,20 +13,36 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 
-#define USE_TOON
+//#define USE_TOON
 #include <libv/lma/lma.hpp>
-#include <libv/geometry/rotation.hpp>
 
-void apply_small_rotation_(Eigen::Matrix3d& rotation, double h, int i, int j)
+namespace v
 {
-  const Eigen::Vector3d col_l = rotation.col(j) - rotation.col(i) * h;
-  rotation.col(i) += rotation.col(j) * h;
-  rotation.col(j) = col_l;
-}
+  Eigen::Matrix3d rotation_exp(const Eigen::Matrix3d &a)
+  {
+    double theta2 = a(0,1)*a(0,1) + a(0,2)*a(0,2) +  a(1,2)*a(1,2) + std::numeric_limits<double>::epsilon();
+    double theta = std::sqrt(theta2);
+    return Eigen::Matrix3d::Identity() + boost::math::sinc_pi(theta)*a+(1.0-std::cos(theta))/theta2*a*a;
+  }
+  
+  void apply_rotation(Eigen::Matrix3d &m, const Eigen::Vector3d &d)
+  {
+    Eigen::Matrix3d skrew;
+    skrew << 0, -d.z(), d.y(), d.z(), 0, -d.x(), -d.y(), d.x(), 0;
+    m *= rotation_exp(skrew);
+  }
 
-void apply_small_rotation_x(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,h,1,2); }
-void apply_small_rotation_y(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,-h,0,2); }
-void apply_small_rotation_z(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,h,0,1); }
+  void apply_small_rotation_(Eigen::Matrix3d& rotation, double h, int i, int j)
+  {
+    const Eigen::Vector3d col_l = rotation.col(j) - rotation.col(i) * h;
+    rotation.col(i) += rotation.col(j) * h;
+    rotation.col(j) = col_l;
+  }
+
+  void apply_small_rotation_x(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,h,1,2); }
+  void apply_small_rotation_y(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,-h,0,2); }
+  void apply_small_rotation_z(Eigen::Matrix3d& rotation, double h) { apply_small_rotation_(rotation,h,0,1); }
+}
 
 // Pose camera = Rotation + Translation + intrinsics
 struct Camera
@@ -60,9 +76,9 @@ namespace lma
   // The Adl parameter enable the usage of a function defined after its use
 	template<int I> void apply_small_increment(Camera& camera, double h, v::numeric_tag<I>, const Adl&)
 	{
-		if      (I == 0) apply_small_rotation_x(camera.rotation,h);
-    else if (I == 1) apply_small_rotation_y(camera.rotation,h);
-    else if (I == 2) apply_small_rotation_z(camera.rotation,h);
+		if      (I == 0) v::apply_small_rotation_x(camera.rotation,h);
+    else if (I == 1) v::apply_small_rotation_y(camera.rotation,h);
+    else if (I == 2) v::apply_small_rotation_z(camera.rotation,h);
 		else if (I == 3) camera.translation.x() += h;
 		else if (I == 4) camera.translation.y() += h;
 		else if (I == 5) camera.translation.z() += h;
