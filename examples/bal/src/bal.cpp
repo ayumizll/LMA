@@ -57,10 +57,10 @@ struct Camera
 
 namespace lma
 {
-	// Update policy of a Camera according to 9 degres of freedom
+  // Update policy of a Camera according to 9 degres of freedom
   // The Adl parameter enable the usage of a function defined after its use
-	void apply_increment(Camera& camera, const double delta[9], const Adl&)
-	{
+  void apply_increment(Camera& camera, const double delta[9], const Adl&)
+  {
     // update rotation using exponential map : camera.rotation *= exp(skew(delta{0,1,2}))
     v::apply_rotation(camera.rotation,{delta[0],delta[1],delta[2]});
 
@@ -69,22 +69,22 @@ namespace lma
 
     // update instrinsics : (camera{a,b,c} += delta{6,7,8})
     Eigen::Map<Eigen::Array3d>(&camera.a) += Eigen::Map<const Eigen::Array3d>(delta+6);
-	}
+  }
 
-	// Only for numerical derivative:
-	// Update policy of a Camera according to the Ie parameter (h ~ 1e-8).
+  // Only for numerical derivative:
+  // Update policy of a Camera according to the Ie parameter (h ~ 1e-8).
   // The Adl parameter enable the usage of a function defined after its use
-	template<int I> void apply_small_increment(Camera& camera, double h, v::numeric_tag<I>, const Adl&)
-	{
-		if      (I == 0) v::apply_small_rotation_x(camera.rotation,h);
+  template<int I> void apply_small_increment(Camera& camera, double h, v::numeric_tag<I>, const Adl&)
+  {
+    if      (I == 0) v::apply_small_rotation_x(camera.rotation,h);
     else if (I == 1) v::apply_small_rotation_y(camera.rotation,h);
     else if (I == 2) v::apply_small_rotation_z(camera.rotation,h);
-		else if (I == 3) camera.translation.x() += h;
-		else if (I == 4) camera.translation.y() += h;
-		else if (I == 5) camera.translation.z() += h;
-		else if (I == 6) camera.a += h;
-		else if (I == 7) camera.b += h;
-		else if (I == 8) camera.c += h;
+    else if (I == 3) camera.translation.x() += h;
+    else if (I == 4) camera.translation.y() += h;
+    else if (I == 5) camera.translation.z() += h;
+    else if (I == 6) camera.a += h;
+    else if (I == 7) camera.b += h;
+    else if (I == 8) camera.c += h;
   }
 
   //degree of freedom of a Camera
