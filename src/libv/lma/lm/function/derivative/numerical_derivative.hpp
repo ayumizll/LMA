@@ -105,7 +105,7 @@ namespace lma
       template<class Fonction, class Result, class Tuple> static void compute(const Fonction& fonction, Result& result, Tuple& tuple)
       {
         static const Float h = Float(2.0)*std::sqrt( std::numeric_limits<Float>::epsilon() );
-        static const Float _h = Float(1.0) / h ;
+        static const Float _h = Float(1.0) / (2.0*h) ;
         //! to_ref : on crée une référence vers l'objet contenu dans le tuple (uniquement pour simplifier l'écriture)
         //! -> to_ref renvoie T& que l'objet contenu soit T ou T*
         //! at -> renvoie at_c<I>(tuple) ou at_c<I>(map).second
