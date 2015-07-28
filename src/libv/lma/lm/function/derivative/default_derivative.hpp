@@ -35,7 +35,7 @@ namespace lma
                      >
                     > {};
 
-  template<class ... T> void plz_no_warning(T...){}
+  
   
 
   template<class F, class D> struct EnableIfConvertible : boost::enable_if<boost::is_convertible<F*,D*>> {};

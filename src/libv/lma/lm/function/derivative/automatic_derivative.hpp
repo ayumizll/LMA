@@ -55,7 +55,7 @@ namespace lma
     
     template<int I, int J> void operator()()
     {
-      j(I,J) = std::get<I>(ad).infinite()[J+DDL];
+      std::get<I,J>(j) = std::get<I>(ad).infinite()[J+DDL];
     }
   };
   

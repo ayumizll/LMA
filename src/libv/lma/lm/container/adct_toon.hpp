@@ -38,6 +38,12 @@ namespace lma
       array[i] = adct::Ad<Float,ddl,Toon>(mat[i],i+dim);
     return array;
   }
+
+  template<int ddl, int dim, class Float> 
+  std::array<adct::Ad<Float,ddl,Toon>,1> to_adct(const Float& flt, boost::fusion::pair<Toon,Float>, typename boost::enable_if<boost::is_floating_point<Float>>::type* =0)
+  {
+    return {adct::Ad<Float,ddl,Toon>(flt,dim)};
+  }
 }
 
 #endif

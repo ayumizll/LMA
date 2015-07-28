@@ -31,12 +31,12 @@ namespace lma
   
   template<class MatrixTag, class Float, size_t I=0> struct PcgTag : PcgConfig {
     PcgTag(){}
-    PcgTag(double seuil_, size_t max_iteration_):PcgConfig(seuil_,max_iteration_) {}
+    PcgTag(double seuil_, size_t max_iteration_, size_t f=-1):PcgConfig(seuil_,max_iteration_,f) {}
   };
   
   template<class MatrixTag, class Float, size_t I> struct ImplPcg : PcgConfig {
     ImplPcg(){}
-    ImplPcg(double seuil_, size_t max_iteration_):PcgConfig(seuil_,max_iteration_) {}
+    ImplPcg(double seuil_, size_t max_iteration_, size_t f=-1):PcgConfig(seuil_,max_iteration_,f) {}
   };
   
   template<class Container, size_t nb_class, class Tag> struct SelectAlgo;

@@ -161,18 +161,24 @@ private:
     {
       clock_total.tic();
       std::cerr
-	<< std::endl
-	<< "\e[33m"
-	<< ttt::name<A>()
-	<< "\e[36m"
-	<< std::endl;
+        << std::endl
+        << "\e[33m"
+        << ttt::name<A>()
+        << "\e[36m : ";
     }
     
     template<class Solver, class Algo>
     void at_end_bundle_adjustment(const Solver& s, const Algo&) const
     {
-      static const boost::format format("\e[36m%-21s: %g\e[m\n");
-      std::cerr << boost::format(format) % "Final cost" % s.final_cost;
+      std::cerr 
+        << " From " << s.initial_cost 
+        << " to " << s.final_cost 
+        << " in " << clock_total.toc() 
+        << " sec.(" << s.it_interne 
+        << " it)." << std::endl;
+      // static const boost::format format("\e[36m%-21s: %g\e[m, ");
+      // std::cerr << boost::format(format) % "Initial" % s.initial_cost;;
+      // std::cerr << boost::format(format) % "Final cost" % s.final_cost;
 //       std::cerr << boost::format(format) % "Total time" % clock_total.toc()
       ;
     }

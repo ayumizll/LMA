@@ -22,7 +22,6 @@
 #include <libv/lma/color/console.hpp>
 #include <utility>
 
-
 namespace ttt {
 
   template<class T, class Enable = void> struct Name

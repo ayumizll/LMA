@@ -19,4 +19,6 @@ struct clement_type{};
 
 inline void clement( clement_type ){}
 
+template<class ... T> inline void plz_no_warning(const T &... ){}
+
 #endif

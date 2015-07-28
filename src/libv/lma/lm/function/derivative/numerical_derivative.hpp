@@ -52,12 +52,14 @@ namespace lma
       template<size_t K, class A, class D> inline void compute(A& a, const Float& b, const Float& c, const D& d) const
       {
       	static_assert( K==0, "K==0" );
-      	a(K,I) = ( b - c ) * d;
+      	std::get<K,I>(a) = ( b - c ) * d;
+        //a(K,I) = ( b - c ) * d;
       }
 
       template<size_t K, class A, class B, class C, class D> inline void compute(A& a, const B& b, const C& c, const D& d) const
       {
-	       a(K,I) = ( std::get<K>(b) - std::get<K>(c) ) * d;
+	       //a(K,I) = ( std::get<K>(b) - std::get<K>(c) ) * d;
+         std::get<K,I>(a) = ( std::get<K>(b) - std::get<K>(c) ) * d;
       }
       
       template<size_t K> inline void operator()(Int<K> const &) const

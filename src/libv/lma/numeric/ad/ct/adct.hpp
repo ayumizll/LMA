@@ -48,7 +48,7 @@ namespace adct
       Array infinite_;
   };
 
-/*
+
 #ifdef USE_TOON
   template<class T, int N> class Ad<T,N,lma::Toon> : public Expr<Ad<T,N,lma::Toon>>
   {
@@ -66,7 +66,7 @@ namespace adct
       Array infinite_;
   };
 #endif
-*/
+
 
   template<class T, class = void> struct Traits { typedef const T& type; };
 

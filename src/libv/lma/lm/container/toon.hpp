@@ -27,6 +27,39 @@
 #include <boost/mpl/if.hpp>
 
 
+namespace std
+{
+  template<int I, int J, int N, class Float> inline const Float& get(const TooN::Vector<N,Float>& mat)
+  {
+    static_assert( I < N , "std::get<I,J>(toon)");
+    static_assert( J == 0 , "std::get<I,J>(toon)");
+    return mat[I];
+  }
+
+  template<int I, int J, int N, int M, class Float> inline const Float& get(const TooN::Matrix<N,M,Float>& mat)
+  {
+    static_assert( I < N , "std::get<I,J>(toon)");
+    static_assert( I < M , "std::get<I,J>(toon)");
+    return mat(I,J);
+  }
+
+
+  template<int I, int J, int N, class Float> inline Float& get(TooN::Vector<N,Float>& mat)
+  {
+    static_assert( I < N , "std::get<I,J>(toon)");
+    static_assert( J == 0 , "std::get<I,J>(toon)");
+    return mat[I];
+  }
+
+  template<int I, int J, int N, int M, class Float> inline Float& get(TooN::Matrix<N,M,Float>& mat)
+  {
+    static_assert( I < N , "std::get<I,J>(toon)");
+    static_assert( I < M , "std::get<I,J>(toon)");
+    return mat(I,J);
+  }
+}
+
+
 namespace lma
 {
   template<std::size_t I, std::size_t J, class flt> struct ContainerOption<boost::fusion::pair<Toon,flt>,I,J>
@@ -44,8 +77,19 @@ namespace lma
     typedef TooN::Vector<TooN::Dynamic,Float> MatrixD1;
   };
   
+
   template<class Float, int N, class _> struct Size<TooN::Vector<N,Float,_>> { enum { value = N }; };
   template<class Float, int N, class _> struct Size<TooN::Matrix<N,1,Float,_>> { enum { value = N }; };
+
+  template<class JA, class JB> inline void jtj(TooN::Vector<1>& result, const JA& Ja, const JB& Jb)
+  {
+    result[0] += transpose(Ja) * Jb;
+  }
+
+  template<int I, class E, class Tag, class Float> inline void jte(TooN::Vector<I,Float>& result, const TooN::Matrix<1,I,Float>& jacob, const E& erreur, ttt::wrap<Tag> const&)
+  {
+    result.as_row() -= transpose(jacob) * make_view(erreur,ttt::wrap<Tag>());
+  }
 
   template<class Float, int Rows, int Cols> struct Rows<TooN::Matrix<Rows,Cols,Float>>
   {
@@ -56,6 +100,16 @@ namespace lma
   template<class Float, int Rows, int Cols> struct Cols<TooN::Matrix<Rows,Cols,Float>>
   {
     enum { value = Cols };
+  };
+
+  template<class Float, int Rows> struct Rows<TooN::Vector<Rows,Float>>
+  {
+    enum { value = Rows };
+  };
+
+  template<class Float, int Rows> struct Cols<TooN::Vector<Rows,Float>>
+  {
+    enum { value = 1 };
   };
 
   
@@ -71,6 +125,7 @@ namespace lma
   
   template<class Float, int N, class _> Float& at(TooN::Vector<N,Float,_>& m, int i, int j)
   {
+    plz_no_warning(j);
     assert(j==0);
     return m[i];
   }
@@ -82,6 +137,7 @@ namespace lma
   
   template<class Float, int N, class _> const Float& at(const TooN::Vector<N,Float,_>& m, int i, int j)
   {
+    plz_no_warning(j);
     assert(j==0);
     return m[i];
   }
@@ -109,6 +165,11 @@ namespace lma
   template<class Float, int I, int J> void set_zero(TooN::Matrix<I,J,Float>& mat)
   {
     mat = TooN::Zeros;
+  }
+
+  template<class Float, int I> void set_zero(TooN::Vector<I,Float>& vec)
+  {
+    vec = TooN::Zeros;
   }
   
   template<class Float, int I, int J>
