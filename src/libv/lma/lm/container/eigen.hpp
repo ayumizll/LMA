@@ -44,11 +44,18 @@ namespace std
     return mat[I];
   }
 
+  template<int I, int N, class Float> inline const Float& get(const Eigen::Matrix<Float,N,1>& mat)
+  {
+    static_assert( I < N , "std::get<I,J>(toon)");
+    return mat[I];
+  }
+
+
 
   template<int I, int J, int N, int M, class Float> inline Float& get(Eigen::Matrix<Float,N,M>& mat)
   {
     static_assert( I < N , "std::get<I>(eigen)");
-    static_assert( J < M , "std::get<I>(eigen)");
+    static_assert( J < M , "std::get<J>(eigen)");
     return mat(I,J);
   }
 

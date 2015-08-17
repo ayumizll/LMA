@@ -102,7 +102,7 @@ namespace lma
       double nb_obs = 0;
       std::tie(rms2,nb_obs) = algo.compute_erreur(bundle);
 
-      double rho = (rms1-rms2) / (algo.compute_scale(lambda) + 1e-3);
+      double rho = 2.0*(rms1-rms2) / (algo.compute_scale(lambda) + 1e-3);
 
       if(rms2 > rms1)
       {
