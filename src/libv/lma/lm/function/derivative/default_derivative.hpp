@@ -31,12 +31,10 @@ namespace lma
                       boost::is_convertible<Obs*,NumericForward*>,
                       boost::is_convertible<Obs*,NumericCentral*>,
                       boost::is_convertible<Obs*,Analytical*>,
-                      boost::is_convertible<Obs*,Automatic*>
+                      boost::is_convertible<Obs*,Automatic*>,
+                      boost::is_convertible<Obs*,CheckAnalytical*>
                      >
                     > {};
-
-  
-  
 
   template<class F, class D> struct EnableIfConvertible : boost::enable_if<boost::is_convertible<F*,D*>> {};
 
@@ -65,7 +63,14 @@ namespace lma
   }
 
   template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
-  void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,Automatic>::type* =0) // analytic
+  void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,CheckAnalytical>::type* =0) // check_analytic
+  {
+    NumericalDerivator<Tag>::derive(fonctor,tuple,result);
+    AnalyticalDerivator<Tag>::derive(fonctor,tuple,result);
+  }
+
+  template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
+  void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,Automatic>::type* =0) // automatic
   {
     #if __cplusplus > 201103L
       AutomaticDerivator<Tag>::derive(fonctor,tuple,result);

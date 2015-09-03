@@ -20,6 +20,7 @@ namespace lma
   struct NumericCentral{};// default
   struct NumericForward{};
   struct Analytical{};
+  struct CheckAnalytical{};
   struct Automatic{};
 }
 

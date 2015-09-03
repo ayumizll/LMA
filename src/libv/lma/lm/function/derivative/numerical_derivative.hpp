@@ -142,7 +142,6 @@ namespace lma
         }
         set_zero(jacob);
       }
-      
     };
 
     template<class Float, std::size_t I, std::size_t Fin> struct TupleDerivator
