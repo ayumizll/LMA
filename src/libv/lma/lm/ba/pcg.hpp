@@ -417,7 +417,7 @@ namespace lma
 //         std::cout << " residual[" << it << "]: " << r1y1 << std::endl;
       }
 
-      std::cout << " nb iteration = " << it << " / " << max_iteration << std::endl;
+//      std::cout << " nb iteration = " << it << " / " << max_iteration << std::endl;
 //       std::cout <<  "final residual : " << residualNorm2 << std::endl;
 //     std::cout << " FINAL [" << it << "]: " << r1y1 << std::endl;
       mpl::for_each<ListeParametre,ttt::wrap<mpl::_1>>(assign_same2(delta,x));
