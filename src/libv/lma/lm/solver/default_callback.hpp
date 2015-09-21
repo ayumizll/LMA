@@ -24,10 +24,11 @@ namespace lma
     template<class S, class A>
     void at_begin_bundle_adjustment(const S&, const A&) const {}
     
-    void at_begin_bundle_adjustment_iteration() const {}
+    template<class S, class A>
+    void at_begin_bundle_adjustment_iteration(const S&, const A&) const {}
     
-    template<class S>
-    void at_end_bundle_adjustment_iteration(const S&) const {}
+    template<class S, class A>
+    void at_end_bundle_adjustment_iteration(const S&, const A&) const {}
     
     template<class S, class A>
     void at_end_bundle_adjustment(const S&, const A&) const {}
