@@ -32,16 +32,17 @@ extern ViewerContext v1, v2, v3;
 struct Callbacks
 : enable_verbose_output
 {
-  void at_begin_bundle_adjustment_iteration() const
+  template<class S, class Algo>
+  void at_begin_bundle_adjustment_iteration(const S& solver, const Algo& algo) const
   {
-    enable_verbose_output::at_begin_bundle_adjustment_iteration();
+    enable_verbose_output::at_begin_bundle_adjustment_iteration(solver,algo);
     v3.clear();
   }
 
-  template<class T1>
-  void at_end_bundle_adjustment_iteration(const T1 &x1) const
+  template<class S, class Algo>
+  void at_end_bundle_adjustment_iteration(const S& solver, const Algo& algo) const
   {
-    enable_verbose_output::at_end_bundle_adjustment_iteration(x1);
+    enable_verbose_output::at_end_bundle_adjustment_iteration(solver,algo);
     v3.update().title("Press enter to continue");
     getchar();
   }
