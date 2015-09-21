@@ -57,7 +57,7 @@ namespace lma
     }
     
     template<class AlgoTag = LdltTag<>, class F = default_callbacks_for_solver>
-    Solver& solve(const AlgoTag& config = LdltTag<>(), const F &callbacks = default_callbacks_for_solver())
+    Solver& solve(const AlgoTag& config = LdltTag<>(), F callbacks = default_callbacks_for_solver())
     {
       if (bundle.nb_obs()==0)
       {
@@ -94,7 +94,7 @@ namespace lma
     template<class Algo, class F>
     bool update(Algo& algo, const F &callbacks)
     {
-      callbacks.at_begin_bundle_adjustment_iteration();
+      callbacks.at_begin_bundle_adjustment_iteration(*this,algo);
 
       auto save_container = bundle.clone_opt_container();
       rms1 = algo.get_erreur();
@@ -109,7 +109,7 @@ namespace lma
         algo.restore_erreur();
         bundle.restore_container(save_container);
         is_better = false;
-        callbacks.at_end_bundle_adjustment_iteration(*this);
+        callbacks.at_end_bundle_adjustment_iteration(*this,algo);
         lambda*=v;
         v *= 2;
       }
@@ -121,7 +121,7 @@ namespace lma
         v = 2;
 
         is_better = true;
-        callbacks.at_end_bundle_adjustment_iteration(*this);
+        callbacks.at_end_bundle_adjustment_iteration(*this,algo);
         if (stop(nb_obs))
         {
           rms1 = rms2;

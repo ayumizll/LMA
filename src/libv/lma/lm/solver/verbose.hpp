@@ -88,13 +88,14 @@ struct enable_verbose_output: default_callbacks_for_solver
     print_iteration(s,s.bundle,"");
   }
 
-  void at_begin_bundle_adjustment_iteration() const
+  template<class Solver, class Algorithm>
+  void at_begin_bundle_adjustment_iteration(const Solver&, const Algorithm&) const
   {
     clock_iteration.tic();
   }
 
-  template<class Solver>
-  void at_end_bundle_adjustment_iteration(const Solver& s) const
+  template<class Solver, class Algorithm>
+  void at_end_bundle_adjustment_iteration(const Solver& s, const Algorithm&) const
   {
     this->print_iteration(s,s.bundle,s.is_better ? "\e[32m" : "\e[31m");
   }
