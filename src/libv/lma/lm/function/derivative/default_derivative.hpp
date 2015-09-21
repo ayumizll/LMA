@@ -63,9 +63,9 @@ namespace lma
   }
 
   template<class Tag, class Fonctor, class Tuple, class Jacob, class Erreur>
-  void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur&, typename EnableIfConvertible<Fonctor,CheckAnalytical>::type* =0) // check_analytic
+  void derivator(const lma::Function<Fonctor>& fonctor, const Tuple& tuple, Jacob& result, const Erreur& error, typename EnableIfConvertible<Fonctor,CheckAnalytical>::type* =0) // check_analytic
   {
-    NumericalDerivator<Tag>::derive(fonctor,tuple,result);
+    NumericalDerivator<Tag>::derive(fonctor,tuple,result,error);
     AnalyticalDerivator<Tag>::derive(fonctor,tuple,result);
   }
 
