@@ -70,8 +70,8 @@ namespace lma
       
       template<class Pair> void operator()(Pair& pair) const
       {
-        for(int i = 0 ; i < pair.second.rows() ; ++i)
-          for(int j = 0 ; j < pair.second.cols() ; ++j)
+        for(int i = 0 ; i < Rows<decltype(pair.second)>::value ; ++i)
+          for(int j = 0 ; j < Cols<decltype(pair.second)>::value ; ++j)
             pair.second(i,j) = pair.second(i,j)*weight[i];
       }
     };
