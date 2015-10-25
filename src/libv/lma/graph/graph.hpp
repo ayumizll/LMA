@@ -48,14 +48,15 @@ namespace lma
 
     void cover(auto& node)
     {
-      node.cover(*this);
+      //node.cover(*this);
+      _cover(*this,node);
     }
 
     void solve(auto ... options)
     {
       boost::fusion::for_each(graph,[this](auto& node){node.covered=false;});
       Solver solver;
-      boost::fusion::for_each(graph,[this](auto& node){cover(*this,node);});
+      boost::fusion::for_each(graph,[this](auto& node){_cover(*this,node);});
       boost::fusion::for_each(graph,[this,&solver](auto& node){fill_solver(node,solver);});
       solver.solve(options...);
       boost::fusion::for_each(graph,[this](auto& node){post_solve(*this,node);});

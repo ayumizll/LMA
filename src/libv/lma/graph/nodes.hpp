@@ -28,7 +28,7 @@ namespace lma
   };
 
 
-  template<class Const> void cover(auto& algo, Const& constraint, typename boost::enable_if<boost::is_convertible<Const*,NodeC*>>::type* = 0)
+  template<class Const> void _cover(auto& algo, Const& constraint, typename boost::enable_if<boost::is_convertible<Const*,NodeC*>>::type* = 0)
   {
     if (constraint.covered) return;
     constraint.clear();
@@ -36,7 +36,7 @@ namespace lma
     constraint.covered = true;
   }
 
-  template<class Params> void cover(auto& algo, Params& parameter, typename boost::enable_if<boost::is_convertible<Params*,NodeP*>>::type* = 0)
+  template<class Params> void _cover(auto& algo, Params& parameter, typename boost::enable_if<boost::is_convertible<Params*,NodeP*>>::type* = 0)
   {
     if (parameter.covered) return;
     parameter.cover(algo);
