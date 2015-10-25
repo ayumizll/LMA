@@ -6,6 +6,42 @@
 //                     http://www.boost.org/LICENSE_1_0.txt
 //==============================================================================
 
+
+#include <libv/lma/lma.hpp>
+
+using namespace lma;
+using namespace Eigen;
+
+int main()
+{
+  Vector4d sphere(0,0,0,100);
+  Vector3d point(60.,10.,80.);
+
+  auto distance = [] (Vector4d sphere, Vector3d point)
+  {
+    return (sphere.head<3>() - point).norm() - sphere[3];
+  };
+
+  auto error = [&distance] (Vector4d sphere, Vector3d point, double& residual)
+  {
+    residual = distance(sphere,point);
+    return true;
+  };
+
+  std::cout << "Error before = " << distance(sphere,point) << std::endl;
+  Solver<decltype(error)>().add(error,&sphere,&point).solve(DENSE_SCHUR);
+  std::cout << "Error after  = " << distance(sphere,point) << std::endl;
+}
+
+#if 0
+//==============================================================================
+//         Copyright 2015 INSTITUT PASCAL UMR 6602 CNRS/Univ. Clermont II
+//
+//          Distributed under the Boost Software License, Version 1.0.
+//                 See accompanying file LICENSE.txt or copy at
+//                     http://www.boost.org/LICENSE_1_0.txt
+//==============================================================================
+
 #ifdef WIN32
 #include <random>
 #endif
@@ -64,3 +100,5 @@ int main(int , char **)
   std::cout << "x,y,r = " << x[0] << "," << x[1] << "," << x[2] << "\n";
   return 0;
 }
+
+#endif
