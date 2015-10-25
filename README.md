@@ -24,6 +24,11 @@ cmake ../LMA -DCMAKE_PREFIX_PATH=../ROOT -DCMAKE_INSTALL_PREFIX=../ROOT
 
 make && make install
 
+Dependencies Graph:
+-
+Tool used to generate multiple constraints problem.
+See: LMA/examples/dependencies_graph
+
 
 Available examples :
 -
