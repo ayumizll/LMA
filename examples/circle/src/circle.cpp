@@ -6,42 +6,6 @@
 //                     http://www.boost.org/LICENSE_1_0.txt
 //==============================================================================
 
-
-#include <libv/lma/lma.hpp>
-
-using namespace lma;
-using namespace Eigen;
-
-int main()
-{
-  Vector4d sphere(0,0,0,100);
-  Vector3d point(60.,10.,80.);
-
-  auto distance = [] (Vector4d sphere, Vector3d point)
-  {
-    return (sphere.head<3>() - point).norm() - sphere[3];
-  };
-
-  auto error = [&distance] (Vector4d sphere, Vector3d point, double& residual)
-  {
-    residual = distance(sphere,point);
-    return true;
-  };
-
-  std::cout << "Error before = " << distance(sphere,point) << std::endl;
-  Solver<decltype(error)>().add(error,&sphere,&point).solve(DENSE_SCHUR);
-  std::cout << "Error after  = " << distance(sphere,point) << std::endl;
-}
-
-#if 0
-//==============================================================================
-//         Copyright 2015 INSTITUT PASCAL UMR 6602 CNRS/Univ. Clermont II
-//
-//          Distributed under the Boost Software License, Version 1.0.
-//                 See accompanying file LICENSE.txt or copy at
-//                     http://www.boost.org/LICENSE_1_0.txt
-//==============================================================================
-
 #ifdef WIN32
 #include <random>
 #endif
@@ -71,6 +35,9 @@ int main(int , char **)
 
   double x[3] = {4, 2, 2};
 
+  std::cout << "x,y,r = " << x[0] << "," << x[1] << "," << x[2] << "\n";
+
+
   std::default_random_engine generator;
   std::uniform_real_distribution<double> distrib_radius(x[2] - 0.1, x[2] + 0.1);
   std::uniform_real_distribution<double> distrib_angle(0., 2. * M_PI);
@@ -87,6 +54,8 @@ int main(int , char **)
   x[0] = x[1] = x[2] = 3;
   x[2] = sqrt(x[2]);
 
+  std::cout << "x,y,r = " << x[0] << "," << x[1] << "," << x[2] << "\n";
+
   double lambda = 0.001;
   double iteration_max = 5;
   lma::Solver<DistanceFromCircleCost> solver(lambda, iteration_max);
@@ -99,6 +68,45 @@ int main(int , char **)
   x[2] *= x[2];
   std::cout << "x,y,r = " << x[0] << "," << x[1] << "," << x[2] << "\n";
   return 0;
+}
+
+
+
+#if 0
+
+#include <libv/lma/lma.hpp>
+
+using namespace lma;
+using namespace Eigen;
+
+double distance(const Vector3d& circle, const Vector2d& point)
+{
+  return (circle.head<2>() - point).norm() - circle[2];
+};
+
+struct Error
+{
+  bool operator()(const Vector3d& circle, const Vector2d& point, double& residual) const
+  {
+    residual = distance(circle,point);
+    return true;
+  }
+};
+
+int main()
+{
+  std::cout << "Error before = " << distance(circle,point) << std::endl;
+
+  Vector3d circle(0,0,100);
+  Vector2d point(60.,10.);
+
+  Solver<Error> solver;
+
+  solver.add(Error{},&circle,&point);
+
+  solver.solve(DENSE_SCHUR);
+
+  std::cout << "Error after  = " << distance(circle,point) << std::endl;
 }
 
 #endif

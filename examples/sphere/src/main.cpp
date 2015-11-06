@@ -3,16 +3,31 @@
 using namespace lma;
 using namespace Eigen;
 
-int main(){
+double distance(const Vector4d& sphere, const Vector3d& point)
+{
+  return (sphere.head<3>() - point).norm() - sphere[3];
+};
 
-  auto f = [] (Vector4d sphere, Vector3d point, double& error)
+
+int main()
+{
+  struct Error
   {
-    error = (sphere.head<3>() - point).norm() - sphere[3];
-    return true;
+    bool operator()(const Vector4d& sphere, const Vector3d& point, double& residual) const
+    {
+      residual = distance(sphere,point);
+      return true;
+    }
   };
   
   Vector4d sphere(0,0,0,100);
   Vector3d point(60,30,80);
-  
-  Solver<decltype(f)>().add(f,&sphere,&point).solve(DENSE_SCHUR);
+ 
+  std::cout << "Error before = " << distance(sphere,point) << std::endl; 
+
+  Solver<Error> solver;
+  solver.add(Error{},&sphere,&point);
+  solver.solve(DENSE_SCHUR, enable_verbose_output());
+
+  std::cout << "Error after = " << distance(sphere,point) << std::endl; 
 }
